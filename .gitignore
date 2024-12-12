@@ -1,3 +1,4 @@
 Cargo.lock
 target/
-./src/version.rs
+src/version.rs
+logs/

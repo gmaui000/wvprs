@@ -1,0 +1,17 @@
+!Config
+store_engine: memory
+store_url: memory://
+user_agent: wvprs
+host: 0.0.0.0
+my_ip: ""
+sip_port: 5060
+http_port: 6070
+sip_domain: 3402000000
+sip_id: 34020000002000000001
+sip_password: aseqw_+hiy123
+sip_algorithm: md5
+sip_nonce: f89d0eaccaf1c90453e2f84688ec800f05
+sip_realm: gmaui000@gmail.com
+socket_recv_buffer_size: 65535
+stream_timeout_seconds: 180
+device_timeout_seconds: 300

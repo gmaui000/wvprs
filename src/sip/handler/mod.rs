@@ -25,7 +25,7 @@ use super::server::{DOUBLE_CR_LF_BYTES, SIP_BYTES};
 
 use crate::store::StoreEngine;
 
-use crate::utils::{ansi_color as Color, cli::CommandLines};
+use crate::utils::{color as Color, config::Config};
 
 pub struct SipHandler {
     pub ip: String,
@@ -43,7 +43,7 @@ pub struct SipHandler {
 
 impl SipHandler {
     pub fn new(
-        cli_args: &CommandLines,
+        cli_args: &Config,
         store: Box<dyn StoreEngine>,
         sip_udp_socket: tokio::net::UdpSocket,
         sip_tcp_listener: tokio::net::TcpListener,

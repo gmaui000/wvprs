@@ -8,7 +8,7 @@ use dashmap::DashMap;
 
 use super::StoreEngine;
 
-use crate::utils::cli::CommandLines;
+use crate::utils::config::Config;
 
 pub struct MemoryStore {
     pub quit_flag: bool,
@@ -40,7 +40,7 @@ pub struct MemoryStore {
 }
 
 impl MemoryStore {
-    pub fn new(cli_args: &CommandLines) -> Self {
+    pub fn new(cli_args: &Config) -> Self {
         MemoryStore {
             quit_flag: true,
             task_handle: None,

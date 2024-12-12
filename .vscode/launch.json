@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'wvprs'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=wvprs",
+                    "--package=wvprs"
+                ],
+                "filter": {
+                    "name": "wvprs",
+                    "kind": "bin"
+                }
+            },
+            "args": ["--config", "config/config.yaml"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'wvprs'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=wvprs",
+                    "--package=wvprs"
+                ],
+                "filter": {
+                    "name": "wvprs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

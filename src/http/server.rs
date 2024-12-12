@@ -4,10 +4,10 @@ use tracing;
 
 use crate::http;
 use crate::sip::handler::SipHandler;
-use crate::utils::cli::CommandLines;
+use crate::utils::config::Config;
 
 pub async fn run_forever(
-    cli_args: &CommandLines,
+    cli_args: &Config,
     sip_handler: std::sync::Arc<SipHandler>,
 ) -> Result<(), std::io::Error> {
     match HttpServer::new(move || {

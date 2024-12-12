@@ -1,4 +1,4 @@
-pub mod ansi_color;
-pub mod cli;
+pub mod color;
+pub mod config;
 pub mod kmp;
 pub mod log;

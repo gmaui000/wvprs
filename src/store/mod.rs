@@ -3,7 +3,7 @@ pub mod not_impl;
 pub mod pg;
 pub mod redis;
 
-use crate::utils::cli::CommandLines;
+use crate::utils::config::Config;
 
 pub trait StoreEngine: Send + Sync {
     fn is_connected(&self) -> bool {
@@ -125,7 +125,7 @@ pub trait StoreEngine: Send + Sync {
     fn stop_timeout_check(&mut self) {}
 }
 
-pub fn create_store(cli_args: &CommandLines) -> Box<dyn StoreEngine> {
+pub fn create_store(cli_args: &Config) -> Box<dyn StoreEngine> {
     match cli_args.store_engine.as_str() {
         "memory" => {
             return Box::new(memory::MemoryStore::new(cli_args));

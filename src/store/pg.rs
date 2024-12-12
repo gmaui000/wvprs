@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use super::StoreEngine;
 
-use crate::utils::cli::CommandLines;
+use crate::utils::config::Config;
 
 pub struct PostgreSqlStore {
     pub quit_flag: bool,
@@ -12,7 +12,7 @@ pub struct PostgreSqlStore {
 }
 
 impl PostgreSqlStore {
-    pub fn new(_cli_args: &CommandLines) -> Self {
+    pub fn new(_cli_args: &Config) -> Self {
         PostgreSqlStore {
             quit_flag: true,
             task_handle: None,

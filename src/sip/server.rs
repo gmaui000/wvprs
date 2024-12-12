@@ -2,7 +2,7 @@ use tokio::{self, io::AsyncReadExt};
 
 use crate::sip::handler::SipHandler;
 
-use crate::utils::{cli::CommandLines, kmp::Kmp};
+use crate::utils::{config::Config, kmp::Kmp};
 
 pub static DOUBLE_CR_LF_STR: &str = "\r\n\r\n";
 pub static DOUBLE_CR_LF_BYTES: &[u8; 4] = b"\r\n\r\n";
@@ -10,7 +10,7 @@ pub static SIP_BYTES: [u8; 3] = [b'S', b'I', b'P'];
 pub static CONTENT_LENGTH_BYTES: &[u8; 15] = b"Content-Length:";
 
 pub async fn bind(
-    cli_args: &CommandLines,
+    cli_args: &Config,
 ) -> Result<(tokio::net::UdpSocket, tokio::net::TcpListener), std::io::Error> {
     let local_addr = format!(
         "{host}:{port}",
@@ -45,7 +45,7 @@ pub async fn bind(
 fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
     // kmp search content-length
     if let Some(mut content_length_begin_pos) =
-        Kmp::find_first_occurrence(buffer, CONTENT_LENGTH_BYTES)
+        Kmp::find_first_target(buffer, CONTENT_LENGTH_BYTES)
     {
         content_length_begin_pos += CONTENT_LENGTH_BYTES.len();
 
@@ -66,7 +66,7 @@ fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
 
         // kmp search \r\n\r\n
         if let Some(mut content_pos) =
-            Kmp::find_first_occurrence(&buffer[content_length_end_pos..], DOUBLE_CR_LF_BYTES)
+            Kmp::find_first_target(&buffer[content_length_end_pos..], DOUBLE_CR_LF_BYTES)
         {
             if buffer.len() - content_pos - DOUBLE_CR_LF_BYTES.len() >= content_length {
                 content_pos += content_length_end_pos + DOUBLE_CR_LF_BYTES.len() + content_length;
@@ -81,7 +81,7 @@ fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
 }
 
 pub async fn run_forever(
-    cli_args: CommandLines,
+    cli_args: Config,
     sip_handler: std::sync::Arc<SipHandler>,
 ) -> Result<(), std::io::Error> {
     // udp server

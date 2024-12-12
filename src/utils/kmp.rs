@@ -1,74 +1,103 @@
 pub struct Kmp {}
 
 impl Kmp {
-    pub fn find_first_occurrence(data: &[u8], target: &[u8]) -> Option<usize> {
+    /// 查找目标字节切片在数据字节切片中首次出现的位置
+    pub fn find_first_target(data: &[u8], target: &[u8]) -> Option<usize> {
         if data.is_empty() || target.is_empty() {
             return None;
         }
 
-        // Combine target and data with a separator
-        let mut combined = Vec::new();
-        combined.extend_from_slice(target); // Add the target
-        combined.push(b'#'); // Add a separator
-        combined.extend_from_slice(data); // Add the data
+        let combined = Self::combine_data_and_target(target, data);
+        let lps = Self::compute_lps(&combined);
 
-        let data_length = data.len(); // Size of the data
-        let target_length = target.len(); // Size of the target
+        let data_length = data.len();
+        let target_length = target.len();
 
-        let lps = Self::longest_prefix_suffix(&combined); // Get the prefix
-
-        // Check for occurrences
         for i in (target_length + 1)..=(data_length + target_length) {
             if lps[i] == target_length {
-                return Some(i - 2 * target_length); // Calculate start index of the occurrence
+                return Some(i - 2 * target_length);
             }
         }
 
-        None // not found
+        None
     }
 
-    pub fn find_all_occurrences(data: &[u8], target: &[u8]) -> Vec<usize> {
+    /// 查找目标字节切片在数据字节切片中所有出现的位置
+    pub fn find_all_targets(data: &[u8], target: &[u8]) -> Vec<usize> {
         if data.is_empty() || target.is_empty() {
             return vec![];
         }
 
-        // Combine target and data with a separator
-        let mut combined = Vec::new();
-        combined.extend_from_slice(target); // Add the target
-        combined.push(b'#'); // Add a separator
-        combined.extend_from_slice(data); // Add the data
+        let combined = Self::combine_data_and_target(target, data);
+        let lps = Self::compute_lps(&combined);
 
-        let data_length = data.len(); // Size of the data
-        let target_length = target.len(); // Size of the target
+        let data_length = data.len();
+        let target_length = target.len();
 
-        let lps = Self::longest_prefix_suffix(&combined); // Get the prefix
-
-        // Check for occurrences
-        let mut occurrences = vec![];
+        let mut targets = vec![];
         for i in (target_length + 1)..=(data_length + target_length) {
             if lps[i] == target_length {
-                occurrences.push(i - 2 * target_length); // Calculate start index of the occurrence
+                targets.push(i - 2 * target_length);
             }
         }
 
-        occurrences // Return the array of occurrences
+        targets
     }
 
-    fn longest_prefix_suffix(data: &[u8]) -> Vec<usize> {
-        let n: usize = data.len(); // Length of the data
-        let mut prefix_suffix = vec![0; n]; // Initialize the prefix suffix array
+    /// 合并目标字节切片和数据字节切片，并添加分隔符
+    fn combine_data_and_target(target: &[u8], data: &[u8]) -> Vec<u8> {
+        let mut combined = Vec::with_capacity(target.len() + data.len() + 1);
+        combined.extend_from_slice(target);
+        combined.push(b'#');
+        combined.extend_from_slice(data);
+        combined
+    }
+
+    /// 计算给定字节切片的最长公共前后缀数组
+    fn compute_lps(data: &[u8]) -> Vec<usize> {
+        let n = data.len();
+        let mut lps = vec![0; n];
+        let mut prefix_end = 0;
 
         for i in 1..n {
-            let mut j = prefix_suffix[i - 1]; // Get the last valid prefix length
-            while j > 0 && data[i] != data[j] {
-                j = prefix_suffix[j - 1]; // Backtrack
+            while prefix_end > 0 && data[i]!= data[prefix_end] {
+                prefix_end = lps[prefix_end - 1];
             }
-            if data[i] == data[j] {
-                j += 1; // If characters match, extend the prefix
+            if data[i] == data[prefix_end] {
+                prefix_end += 1;
             }
-            prefix_suffix[i] = j; // Update the prefix
+            lps[i] = prefix_end;
         }
 
-        prefix_suffix // Return the prefix suffix array
+        lps
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Kmp;
+
+    #[test]
+    fn test_find_first_target() {
+        let data = b"hello world";
+        let target = b"world";
+        let result = Kmp::find_first_target(data, target);
+        assert_eq!(result, Some(6));
+    }
+
+    #[test]
+    fn test_find_all_targets() {
+        let data = b"ababab";
+        let target = b"ab";
+        let result = Kmp::find_all_targets(data, target);
+        assert_eq!(result, vec![0, 2, 4]);
+    }
+
+    #[test]
+    fn test_find_no_target() {
+        let data = b"abcdef";
+        let target = b"xyz";
+        let result = Kmp::find_first_target(data, target);
+        assert_eq!(result, None);
     }
 }
