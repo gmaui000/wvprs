@@ -1,0 +1,42 @@
+[package]
+name = "wvprs"
+version = "0.0.1"
+edition = "2021"
+license = "MIT"
+authors = ["gmaui000@163.com"]
+publish = false
+
+[dependencies]
+actix-web = { version = "4.9.0" }
+async-trait = { version = "0.1.81" }
+chrono = { version = "0.4.38" }
+encoding_rs = { version = "0.8.34" }
+local-ip-address = { version = "0.6.1" }
+prost = { version = "0.13.2" }
+prost-types = { version = "0.13.2" }
+rand = { version = "0.8.5" }
+regex = { version = "1.10.6" }
+rsip = { version = "0.4.0" }
+sdp-rs = { version = "0.2.1" }
+serde = { version = "1.0.207", features = ["derive"] }
+serde_json = { version = "1.0.124" }
+serde-xml-rs = { version = "0.6.0" }
+structopt = { version = "0.3.26" }
+textcode = { version = "0.2.2" }
+time = { version = "0.3.36", features = ["formatting", "macros"] }
+tracing = { version = "0.1.40" }
+tracing-appender = { version = "0.2.3" }
+tracing-subscriber = { version = "0.3.18 ", features = ["env-filter", "time", "local-time", "json"] }
+tokio = { version = "1.39.2", features = ["full"] }
+tonic = { version = "0.12.2" }
+uuid = { version = "1.10.0", features = ["v4", "zerocopy"] }
+vec1 = { version = "1.12.1" }
+sysinfo = "0.33.0"
+dashmap = "6.1"
+
+[build-dependencies]
+regex = { version = "1.10.6" }
+tonic-build = { version = "0.12.2" }
+walkdir = { version = "2.5.0" }
+
+

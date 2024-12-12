@@ -1,0 +1,9 @@
+pub static RESET: &str = "\x1b[0m";
+pub static BLACK: &str = "\x1b[30m";
+pub static RED: &str = "\x1b[31m";
+pub static GREEN: &str = "\x1b[32m";
+pub static YELLOW: &str = "\x1b[33m";
+pub static BLUE: &str = "\x1b[34m";
+pub static PURPLE: &str = "\x1b[35m";
+pub static CYAN: &str = "\x1b[36m";
+pub static WHITE: &str = "\x1b[37m";
