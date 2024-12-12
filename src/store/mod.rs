@@ -125,20 +125,20 @@ pub trait StoreEngine: Send + Sync {
     fn stop_timeout_check(&mut self) {}
 }
 
-pub fn create_store(cli_args: &Config) -> Box<dyn StoreEngine> {
-    match cli_args.store_engine.as_str() {
+pub fn create_store(config: &Config) -> Box<dyn StoreEngine> {
+    match config.store_engine.as_str() {
         "memory" => {
-            return Box::new(memory::MemoryStore::new(cli_args));
+            return Box::new(memory::MemoryStore::new(config));
         }
         "mysql" => {
-            return Box::new(mysql::MySqlStore::new(cli_args));
+            return Box::new(mysql::MySqlStore::new(config));
         }
         "redis" => {
-            return Box::new(redis::RedisStore::new(cli_args));
+            return Box::new(redis::RedisStore::new(config));
         }
         _ => {
-            tracing::error!("not impl store engine: {}", &cli_args.store_engine);
-            return Box::new(not_impl::NotImplStore::new(cli_args));
+            tracing::error!("not impl store engine: {}", &config.store_engine);
+            return Box::new(not_impl::NotImplStore::new(config));
         }
     }
 }

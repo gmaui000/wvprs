@@ -7,7 +7,7 @@ use crate::sip::handler::SipHandler;
 use crate::utils::config::Config;
 
 pub async fn run_forever(
-    cli_args: &Config,
+    config: &Config,
     sip_handler: std::sync::Arc<SipHandler>,
 ) -> Result<(), std::io::Error> {
     match HttpServer::new(move || {
@@ -20,21 +20,21 @@ pub async fn run_forever(
             .service(http::handler::replay::post_stop)
             .service(http::handler::replay::post_keep_alive)
     })
-    .bind((cli_args.host.clone(), cli_args.http_port))
+    .bind((config.host.clone(), config.http_port))
     {
         Ok(h) => {
             tracing::info!(
                 "HttpServer::bind({}:{}) ok",
-                &cli_args.host,
-                cli_args.http_port
+                &config.host,
+                config.http_port
             );
             h.run().await
         }
         Err(e) => {
             tracing::error!(
                 "HttpServer::bind({}:{}) error, e: {:?}",
-                &cli_args.host,
-                cli_args.http_port,
+                &config.host,
+                config.http_port,
                 e
             );
             return Err(e);

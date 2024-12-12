@@ -10,12 +10,12 @@ pub static SIP_BYTES: [u8; 3] = [b'S', b'I', b'P'];
 pub static CONTENT_LENGTH_BYTES: &[u8; 15] = b"Content-Length:";
 
 pub async fn bind(
-    cli_args: &Config,
+    config: &Config,
 ) -> Result<(tokio::net::UdpSocket, tokio::net::TcpListener), std::io::Error> {
     let local_addr = format!(
         "{host}:{port}",
-        host = cli_args.host,
-        port = cli_args.sip_port
+        host = config.host,
+        port = config.sip_port
     );
 
     // udp server
@@ -81,14 +81,14 @@ fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
 }
 
 pub async fn run_forever(
-    cli_args: Config,
+    config: Config,
     sip_handler: std::sync::Arc<SipHandler>,
 ) -> Result<(), std::io::Error> {
     // udp server
     let sip_handler_udp = sip_handler.clone();
     let udp_server_handle = tokio::spawn(async move {
         let mut recv_buff = Vec::<u8>::default();
-        recv_buff.resize(cli_args.socket_recv_buffer_size, 0);
+        recv_buff.resize(config.socket_recv_buffer_size, 0);
 
         loop {
             match sip_handler_udp

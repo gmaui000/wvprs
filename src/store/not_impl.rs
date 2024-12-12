@@ -12,7 +12,7 @@ pub struct NotImplStore {
 }
 
 impl NotImplStore {
-    pub fn new(_cli_args: &Config) -> Self {
+    pub fn new(_config: &Config) -> Self {
         NotImplStore {
             quit_flag: true,
             task_handle: None,

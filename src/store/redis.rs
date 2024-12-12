@@ -12,7 +12,7 @@ pub struct RedisStore {
 }
 
 impl RedisStore {
-    pub fn new(_cli_args: &Config) -> Self {
+    pub fn new(_config: &Config) -> Self {
         RedisStore {
             quit_flag: true,
             task_handle: None,

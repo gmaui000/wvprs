@@ -43,20 +43,20 @@ pub struct SipHandler {
 
 impl SipHandler {
     pub fn new(
-        cli_args: &Config,
+        config: &Config,
         store: Box<dyn StoreEngine>,
         sip_udp_socket: tokio::net::UdpSocket,
         sip_tcp_listener: tokio::net::TcpListener,
     ) -> Self {
         SipHandler {
-            ip: cli_args.my_ip.clone(),
-            port: cli_args.sip_port,
-            domain: cli_args.sip_domain.clone(),
-            id: cli_args.sip_id.clone(),
-            password: cli_args.sip_password.clone(),
-            algorithm: rsip::headers::auth::Algorithm::from_str(&cli_args.sip_algorithm).unwrap(),
-            nonce: cli_args.sip_nonce.clone(),
-            realm: cli_args.sip_realm.clone(),
+            ip: config.my_ip.clone(),
+            port: config.sip_port,
+            domain: config.sip_domain.clone(),
+            id: config.sip_id.clone(),
+            password: config.sip_password.clone(),
+            algorithm: rsip::headers::auth::Algorithm::from_str(&config.sip_algorithm).unwrap(),
+            nonce: config.sip_nonce.clone(),
+            realm: config.sip_realm.clone(),
             store: store,
             sip_udp_socket: sip_udp_socket,
             sip_tcp_listener: sip_tcp_listener,

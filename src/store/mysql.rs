@@ -12,7 +12,7 @@ pub struct MySqlStore {
 }
 
 impl MySqlStore {
-    pub fn new(_cli_args: &Config) -> Self {
+    pub fn new(_config: &Config) -> Self {
         MySqlStore {
             quit_flag: true,
             task_handle: None,

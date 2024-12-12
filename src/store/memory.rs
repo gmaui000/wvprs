@@ -40,13 +40,13 @@ pub struct MemoryStore {
 }
 
 impl MemoryStore {
-    pub fn new(cli_args: &Config) -> Self {
+    pub fn new(config: &Config) -> Self {
         MemoryStore {
             quit_flag: true,
             task_handle: None,
             service_id: Uuid::new_v4().to_string(),
-            stream_timeout_seconds: cli_args.stream_timeout_seconds,
-            device_timeout_seconds: cli_args.stream_timeout_seconds,
+            stream_timeout_seconds: config.stream_timeout_seconds,
+            device_timeout_seconds: config.stream_timeout_seconds,
             live_stream_id: AtomicU32::new(1),
             replay_stream_id: AtomicU32::new(1),
             global_sn: AtomicU32::new(0),
