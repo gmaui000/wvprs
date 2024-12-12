@@ -4,8 +4,8 @@ use tracing_subscriber::{fmt, prelude::*};
 use tracing_appender::non_blocking::WorkerGuard;
 use time::{macros::format_description, UtcOffset};
 use std::{env, panic};
-use crate::version;
-use crate::utils::color as Color;
+use super::super::version;
+use super::color;
 use super::config::Config;
 
 pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
@@ -66,7 +66,7 @@ pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
 ║ sip_realm: {:<45} ║
 ║ socket_recv_buffer_size: {:<31} ║
 ╚══════════════════════════════════════════════════════════╝{}",
-        Color::PURPLE,
+        color::PURPLE,
         version::APP_VERSION,
         &config.store_engine,
         &config.store_url,
@@ -82,7 +82,7 @@ pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
         &config.sip_nonce,
         &config.sip_realm,
         &config.socket_recv_buffer_size,
-        Color::RESET
+        color::RESET
     );
     Ok(vec![file_log_guard, std_out_guard])
 }

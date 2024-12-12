@@ -8,7 +8,6 @@ use std::{path::PathBuf, process::exit};
 use tracing::{self, error};
 use utils::config::Config;
 
-
 pub mod gss {
     tonic::include_proto!("gss");
 }

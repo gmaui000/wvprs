@@ -25,7 +25,7 @@ use super::server::{DOUBLE_CR_LF_BYTES, SIP_BYTES};
 
 use crate::store::StoreEngine;
 
-use crate::utils::{color as Color, config::Config};
+use crate::utils::{color, config::Config};
 
 pub struct SipHandler {
     pub ip: String,
@@ -94,27 +94,27 @@ impl SipHandler {
             Err(e) => {
                 tracing::error!(
                     "{}rsip::Request::try_from error, e: {}, {}request: {}",
-                    Color::RED,
+                    color::RED,
                     e,
-                    Color::RESET,
+                    color::RESET,
                     String::from_utf8_lossy(sip_data)
                 );
             }
             Ok(request) => {
                 tracing::info!(
                     "{}⮜⮜⮜⮜⮜ {}rsip::Request::try_from({}) ok, amount: {:?}, request:{}\n{}",
-                    Color::PURPLE,
-                    Color::CYAN,
+                    color::PURPLE,
+                    color::CYAN,
                     device_addr,
                     sip_data.len(),
-                    Color::RESET,
+                    color::RESET,
                     format!(
                         "{}{} {} {}{}\n{}{}",
-                        Color::YELLOW,
+                        color::YELLOW,
                         request.method().to_string(),
                         request.version().to_string(),
                         request.uri().to_string(),
-                        Color::RESET,
+                        color::RESET,
                         request.headers().to_string(),
                         self.decode_body(request.body())
                     )
@@ -184,20 +184,20 @@ impl SipHandler {
             Err(e) => {
                 tracing::error!(
                     "{}rsip::Response::try_from error, e: {}, {}response: {}",
-                    Color::RED,
+                    color::RED,
                     e,
-                    Color::RESET,
+                    color::RESET,
                     String::from_utf8_lossy(sip_data)
                 );
             }
             Ok(response) => {
                 tracing::info!(
                     "{}⮜⮜⮜⮜⮜ {}rsip::Response::try_from({}) ok, amount: {:?}, response:{}\n{}",
-                    Color::PURPLE,
-                    Color::CYAN,
+                    color::PURPLE,
+                    color::CYAN,
                     device_addr,
                     sip_data.len(),
-                    Color::RESET,
+                    color::RESET,
                     format!(
                         "{} {}\n{}\n{}",
                         response.version().to_string(),

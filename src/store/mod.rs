@@ -1,6 +1,6 @@
 pub mod memory;
 pub mod not_impl;
-pub mod pg;
+pub mod mysql;
 pub mod redis;
 
 use crate::utils::config::Config;
@@ -130,8 +130,8 @@ pub fn create_store(cli_args: &Config) -> Box<dyn StoreEngine> {
         "memory" => {
             return Box::new(memory::MemoryStore::new(cli_args));
         }
-        "postgresql" => {
-            return Box::new(pg::PostgreSqlStore::new(cli_args));
+        "mysql" => {
+            return Box::new(mysql::MySqlStore::new(cli_args));
         }
         "redis" => {
             return Box::new(redis::RedisStore::new(cli_args));

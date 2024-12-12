@@ -4,7 +4,7 @@ use tokio::io::AsyncWriteExt;
 use tracing;
 
 use crate::sip::handler::SipHandler;
-use crate::utils::color as Color;
+use crate::utils::color;
 
 impl SipHandler {
     pub async fn socket_send_request(
@@ -97,10 +97,10 @@ impl SipHandler {
             Err(e) => {
                 tracing::error!(
                     "{}UdpSocket::send_to({}) error, e: {}, {}data: {}",
-                    Color::RED,
+                    color::RED,
                     addr,
                     e,
-                    Color::RESET,
+                    color::RESET,
                     text
                 );
                 return false;
@@ -108,12 +108,12 @@ impl SipHandler {
             Ok(amount) => {
                 tracing::info!(
                     "{}⮞⮞⮞⮞⮞ {}UdpSocket::send_to({}) ok, amount: {}, {}:{}\n{}",
-                    Color::GREEN,
-                    Color::CYAN,
+                    color::GREEN,
+                    color::CYAN,
                     addr,
                     amount,
                     data_type,
-                    Color::RESET,
+                    color::RESET,
                     text
                 );
                 return true;
@@ -133,10 +133,10 @@ impl SipHandler {
             Err(e) => {
                 tracing::error!(
                     "{}TcpStream::send_to({}) error, e: {}, {}data: {}",
-                    Color::RED,
+                    color::RED,
                     addr,
                     e,
-                    Color::RESET,
+                    color::RESET,
                     text
                 );
                 return false;
@@ -144,12 +144,12 @@ impl SipHandler {
             Ok(()) => {
                 tracing::info!(
                     "{}⮞⮞⮞⮞⮞ {}TcpStream::send_to({}) ok, amount: {}, {}:{}\n{}",
-                    Color::GREEN,
-                    Color::CYAN,
+                    color::GREEN,
+                    color::CYAN,
                     addr,
                     data.len(),
                     data_type,
-                    Color::RESET,
+                    color::RESET,
                     text
                 );
                 return true;
