@@ -14,9 +14,10 @@ impl SipHandler {
     ) {
         if let Some(auth) = request.authorization_header() {
             if let Ok(auth) = auth.typed() {
-                if self.is_authorized(&auth.username, request.method(), &auth.uri, &auth.response) {
+                if self.is_authorized(&auth.username, request.method(), &auth.uri, auth.qop.as_ref(), &auth.response) {
+                    let device_id = request.from_header().unwrap().uri().unwrap().user().unwrap().to_string();
                     return self
-                        .on_req_register_200(device_addr, tcp_stream, &request, &auth.username)
+                        .on_req_register_200(device_addr, tcp_stream, &request, &device_id)
                         .await;
                 }
             }
@@ -45,7 +46,7 @@ impl SipHandler {
                 realm: self.realm.clone(),
                 nonce: self.nonce.clone(),
                 algorithm: Some(self.algorithm),
-                opaque: Some("".into()),
+                qop: Some(rsip::headers::auth::Qop::Auth),
                 ..Default::default()
             }
             .into(),

@@ -22,9 +22,7 @@ use rsip::{
 };
 
 use super::server::{DOUBLE_CR_LF_BYTES, SIP_BYTES};
-
 use crate::store::StoreEngine;
-
 use crate::utils::{color, config::Config};
 
 pub struct SipHandler {

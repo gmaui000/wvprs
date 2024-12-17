@@ -7,39 +7,42 @@ authors = ["gmaui000@163.com"]
 publish = false
 
 [dependencies]
-anyhow = "1.0.94"
-actix-web = { version = "4.9.0" }
-async-trait = { version = "0.1.83" }
-chrono = { version = "0.4.39" }
-encoding_rs = { version = "0.8.35" }
-local-ip-address = { version = "0.6.3" }
-prost = { version = "0.13.4" }
-prost-types = { version = "0.13.4" }
-rand = { version = "0.8.5" }
-regex = { version = "1.11.1" }
-rsip = { version = "0.4.0" }
-sdp-rs = { version = "0.2.1" }
-serde = { version = "1.0.216", features = ["derive"] }
-serde_json = { version = "1.0.133" }
-serde_yaml = "0.9.33"
-serde-xml-rs = { version = "0.6.0" }
-structopt = { version = "0.3.26" }
-textcode = { version = "0.2.2" }
-time = { version = "0.3.37", features = ["formatting", "macros"] }
-clap = { version = "4.5.23", features = ["derive"] }
-tracing = { version = "0.1.41" }
-tracing-appender = { version = "0.2.3" }
-tracing-subscriber = { version = "0.3.19", features = ["env-filter", "time", "local-time", "json"] }
-tokio = { version = "1.42.0", features = ["full"] }
-tonic = { version = "0.12.3" }
-uuid = { version = "1.11.0", features = ["v4", "zerocopy"] }
-vec1 = { version = "1.12.1" }
-sysinfo = "0.33.0"
+anyhow = "1.0"
+actix-web = { version = "4.9" }
+async-trait = { version = "0.1" }
+chrono = { version = "0.4" }
+encoding_rs = { version = "0.8" }
+local-ip-address = { version = "0.6" }
+prost = { version = "0.13" }
+prost-types = { version = "0.13" }
+rand = { version = "0.8" }
+regex = { version = "1.11" }
+rsip = { version = "0.4" }
+sdp-rs = { version = "0.2" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+serde_yaml = "0.9"
+serde-xml-rs = { version = "0.6" }
+structopt = { version = "0.3" }
+textcode = { version = "0.2" }
+time = { version = "0.3", features = ["formatting", "macros"] }
+clap = { version = "4.5", features = ["derive"] }
+tracing = { version = "0.1" }
+tracing-appender = { version = "0.2" }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "time", "local-time", "json"] }
+tokio = { version = "1.42", features = ["full"] }
+tonic = { version = "0.12" }
+uuid = { version = "1.11", features = ["v4", "zerocopy"] }
+vec1 = { version = "1.12" }
+sysinfo = "0.33"
 dashmap = "6.1"
+message-io = "0.18"
+bytes = "1.6"
+byteorder = "1.5"
 
 [build-dependencies]
-regex = { version = "1.11.1" }
-tonic-build = { version = "0.12.3" }
-walkdir = { version = "2.5.0" }
+regex = { version = "1.11" }
+tonic-build = { version = "0.12" }
+walkdir = { version = "2.5" }
 
 

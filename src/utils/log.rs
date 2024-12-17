@@ -33,7 +33,7 @@ pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
         )
      .with(
             fmt::Layer::new()
-             .with_writer(filelog.with_max_level(tracing::Level::INFO))
+             .with_writer(filelog.with_max_level(tracing::Level::DEBUG))
              .with_timer(local_time.clone())
              .with_ansi(false)
              .with_target(true)
