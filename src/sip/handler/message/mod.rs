@@ -1,5 +1,6 @@
 pub mod on_device_status;
 pub mod on_keep_alive;
+pub mod on_catalog;
 
 use regex::Regex;
 
@@ -24,6 +25,10 @@ impl SipHandler {
             }
             "DeviceStatus" => {
                 self.on_device_status(device_addr, tcp_stream, request, msg)
+                    .await;
+            }
+            "Catalog" => {
+                self.on_catalog(device_addr, tcp_stream, request, msg)
                     .await;
             }
             _ => {}

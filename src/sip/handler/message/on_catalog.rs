@@ -1,23 +1,22 @@
 use rsip::{self, prelude::HeadersExt};
-
 use super::SipHandler;
-
-use crate::sip::message::KeepAlive;
+use crate::sip::message::Catalog;
 
 impl SipHandler {
-    pub async fn on_keep_alive(
+    pub async fn on_catalog(
         &self,
         device_addr: std::net::SocketAddr,
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
         request: rsip::Request,
         msg: String,
     ) {
-        let data = KeepAlive::deserialize_from_xml(msg);
+        let data = Catalog::deserialize_from_xml(msg);
+        tracing::debug!("on_catalog: {:?}", data);
         if data.sn > 0 {
             self.store.set_global_sn(data.sn);
         }
 
-        let gb_code = request
+        let _gb_code = request
             .from_header()
             .unwrap()
             .uri()
@@ -25,7 +24,13 @@ impl SipHandler {
             .auth
             .unwrap()
             .to_string();
-        self.store.register_keep_alive(&gb_code);
+
+        if data.sn > 0 {
+            self.store.set_global_sn(data.sn);
+        }
+
+        // 存储 catalog 信息，例如调用 store 中的某个方法
+        // self.store.register_catalog(&gb_code, &data);
 
         let mut headers: rsip::Headers = Default::default();
         headers.push(request.via_header().unwrap().clone().into());

@@ -100,7 +100,7 @@ impl SipHandler {
             }
             Ok(request) => {
                 tracing::info!(
-                    "{}⮜⮜⮜⮜⮜ {}rsip::Request::try_from({}) ok, amount: {:?}, request:{}\n{}",
+                    "{}dispatch {}rsip::Request::try_from({}) ok, amount: {:?}, request:{}\n{}",
                     color::PURPLE,
                     color::CYAN,
                     device_addr,
@@ -190,7 +190,7 @@ impl SipHandler {
             }
             Ok(response) => {
                 tracing::info!(
-                    "{}⮜⮜⮜⮜⮜ {}rsip::Response::try_from({}) ok, amount: {:?}, response:{}\n{}",
+                    "{}dispatch {}rsip::Response::try_from({}) ok, amount: {:?}, response:{}\n{}",
                     color::PURPLE,
                     color::CYAN,
                     device_addr,

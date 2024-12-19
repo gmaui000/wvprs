@@ -13,7 +13,7 @@ impl SipHandler {
             realm: &self.realm,
         };
 
-        println!("caobing:{:?} {:?} {:#?}",generator.uri.to_string(), generator.method.to_string(), generator.compute());
+        tracing::debug!("caobing:{:?} {:?} {:#?}",generator.uri.to_string(), generator.method.to_string(), generator.compute());
 
         return generator.verify(digest);
     }

@@ -22,7 +22,7 @@ pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
     let subscriber = tracing_subscriber::registry()
      .with(
             fmt::Layer::new()
-             .with_writer(stdoutlog.with_max_level(tracing::Level::DEBUG))
+             .with_writer(stdoutlog.with_max_level(tracing::Level::TRACE))
              .with_timer(local_time.clone())
              .with_ansi(true)
              .with_target(true)
@@ -33,7 +33,7 @@ pub fn init(config: &Config) -> anyhow::Result<Vec<WorkerGuard>> {
         )
      .with(
             fmt::Layer::new()
-             .with_writer(filelog.with_max_level(tracing::Level::DEBUG))
+             .with_writer(filelog.with_max_level(tracing::Level::TRACE))
              .with_timer(local_time.clone())
              .with_ansi(false)
              .with_target(true)

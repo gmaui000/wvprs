@@ -163,9 +163,10 @@ impl StoreEngine for MemoryStore {
                 .expect("Time went backwards")
                 .as_secs() as u32;
 
+            tracing::debug!("register a sip_devices: {:?}", self.sip_devices);
             self.sip_devices.insert(
                 gb_code.clone(),
-                (branch.clone(), socket_addr, tcp_stream.clone(), ts),
+                (branch.clone(), socket_addr, tcp_stream.as_ref().cloned(), ts),
             );
             return true;
         }
@@ -181,19 +182,13 @@ impl StoreEngine for MemoryStore {
     }
 
     fn register_keep_alive(&self, gb_code: &String) -> bool {
-        if let Some(device) = self.sip_devices.get(gb_code) {
-            let (brh, addr, tcp_stream, _ts) = device.value();
-            let address = addr.clone();
-            let branch = brh.clone();
-            let stream = tcp_stream.clone();
-
+        let entry = self.sip_devices.entry(gb_code.to_string());
+        if let dashmap::Entry::Occupied(mut device) =  entry {
             let ts = std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .expect("Time went backwards")
                 .as_secs() as u32;
-
-            self.sip_devices
-                .insert(gb_code.clone(), (branch.clone(), address, stream, ts));
+            device.get_mut().3 = ts;
             return true;
         }
         return false;
@@ -252,15 +247,10 @@ impl StoreEngine for MemoryStore {
         stream_server_ip: String,
         stream_server_port: u16,
     ) {
-        if let Some(stream) = self.gb_streams.get(&stream_id)
-        {
-            let (gb_code, caller_id, _stream_server_ip, _stream_server_port, ts) = stream.value();
-            let cid = caller_id.clone();
-            let t = *ts;
-            let g = gb_code.clone();
-
-            self.gb_streams
-                .insert(stream_id, (g, cid, stream_server_ip, stream_server_port, t));
+        let entry = self.gb_streams.entry(stream_id);
+        if let dashmap::Entry::Occupied(mut stream) =  entry {
+            stream.get_mut().2 = stream_server_ip;
+            stream.get_mut().3 = stream_server_port;
         }
     }
 
@@ -310,20 +300,14 @@ impl StoreEngine for MemoryStore {
     }
 
     fn stream_keep_alive(&self, gb_code: &String, stream_id: u32) -> bool {
-        if let Some(stream) = self.gb_streams.get(&stream_id)
-        {
-            let (_gb_code, caller_id, stream_server_ip, stream_server_port, _ts) =  stream.value();
-            let cid = caller_id.clone();
-            let ip = stream_server_ip.clone();
-            let port = *stream_server_port;
-
+        let entry = self.gb_streams.entry(stream_id);
+        if let dashmap::Entry::Occupied(mut stream) =  entry {
             let ts = std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .expect("Time went backwards")
-                .as_secs() as u32;
-
-            self.gb_streams
-                .insert(stream_id, (gb_code.clone(), cid, ip, port, ts));
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("Time went backwards")
+            .as_secs() as u32;
+            stream.get_mut().0 = gb_code.clone();
+            stream.get_mut().4 = ts;
             return true;
         }
         return false;

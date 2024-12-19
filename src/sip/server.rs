@@ -70,9 +70,11 @@ fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
         {
             if buffer.len() - content_pos - DOUBLE_CR_LF_BYTES.len() >= content_length {
                 content_pos += content_length_end_pos + DOUBLE_CR_LF_BYTES.len() + content_length;
-                let sip_message = buffer[..content_pos].to_vec();
-                let remaining = buffer[content_pos..].to_vec();
-                return Some((sip_message, remaining));
+                if content_pos <= buffer.len() {
+                    let sip_message = buffer[..content_pos].to_vec();
+                    let remaining = buffer[content_pos..].to_vec();
+                    return Some((sip_message, remaining));
+                }
             }
         }
     }

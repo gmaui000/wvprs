@@ -105,12 +105,12 @@ impl SipHandler {
             body: Default::default(),
         };
 
-        let tcp_stream_ref = &tcp_stream;
+        let tcp_stream_ref = tcp_stream.clone();
         self.socket_send_response(device_addr, tcp_stream_ref.clone(), response).await;
 
         if is_register {
             let via = request.via_header().unwrap();
-            self.send_device_status_query(
+            self.send_catalog_query(
                 device_addr,
                 tcp_stream_ref.clone(),
                 self.transport_get(via),

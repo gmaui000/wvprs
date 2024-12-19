@@ -54,7 +54,7 @@ impl SipHandler {
             )
             .await;
     }
-
+    
     pub async fn socket_send_response_with_body(
         &self,
         addr: std::net::SocketAddr,
@@ -107,7 +107,7 @@ impl SipHandler {
             }
             Ok(amount) => {
                 tracing::info!(
-                    "{}⮞⮞⮞⮞⮞ {}UdpSocket::send_to({}) ok, amount: {}, {}:{}\n{}",
+                    "{}socket_send {}UdpSocket::send_to({}) ok, amount: {}, {}:{}\n{}",
                     color::GREEN,
                     color::CYAN,
                     addr,
@@ -143,7 +143,7 @@ impl SipHandler {
             }
             Ok(()) => {
                 tracing::info!(
-                    "{}⮞⮞⮞⮞⮞ {}TcpStream::send_to({}) ok, amount: {}, {}:{}\n{}",
+                    "{}socket_send {}TcpStream::send_to({}) ok, amount: {}, {}:{}\n{}",
                     color::GREEN,
                     color::CYAN,
                     addr,

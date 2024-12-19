@@ -2,7 +2,7 @@ use crate::sip::handler::SipHandler;
 use crate::{sip, version};
 
 impl SipHandler {
-    pub async fn send_device_status_query(
+    pub async fn send_catalog_query(
         &self,
         device_addr: std::net::SocketAddr,
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
@@ -12,7 +12,7 @@ impl SipHandler {
     ) -> bool {
         // body
         let text_body =
-            sip::message::DeviceStatusQuery::new(self.store.add_fetch_global_sn(), gb_code)
+            sip::message::CatalogQuery::new(self.store.add_fetch_global_sn(), gb_code)
                 .serialize_to_xml();
         let bin_body = self.encode_body(&text_body);
 

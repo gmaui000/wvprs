@@ -29,7 +29,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::load_from_file(&args.config).unwrap();
 
     // open daily log
-    let _ = utils::log::init(&config);
+    let _log = utils::log::init(&config);
 
     // prepare sip server
     let (sip_udp_socket, sip_tcp_listener) = sip::server::bind(&config).await?;
