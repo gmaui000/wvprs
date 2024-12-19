@@ -42,7 +42,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // run sip server
-    let sip_handler = sip::handler::SipHandler::new(&config, store_engine, sip_udp_socket, sip_tcp_listener);
+    let sip_handler =
+        sip::handler::SipHandler::new(&config, store_engine, sip_udp_socket, sip_tcp_listener);
     let sip_handler_arc = std::sync::Arc::new(sip_handler);
     let sip_service = sip::server::run_forever(config.clone(), sip_handler_arc.clone());
 
