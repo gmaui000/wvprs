@@ -1,3 +1,4 @@
+use std::fmt;
 use std::str::FromStr;
 
 use sdp_rs;
@@ -11,13 +12,13 @@ pub enum SdpSessionType {
     Talk,
 }
 
-impl ToString for SdpSessionType {
-    fn to_string(&self) -> String {
-        match &self {
-            &Self::Play => String::from("Play"),
-            &Self::Playback => String::from("Playback"),
-            &Self::Download => String::from("Download"),
-            &Self::Talk => String::from("Talk"),
+impl fmt::Display for SdpSessionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            SdpSessionType::Play => write!(f, "Play"),
+            SdpSessionType::Playback => write!(f, "Playback"),
+            SdpSessionType::Download => write!(f, "Download"),
+            SdpSessionType::Talk => write!(f, "Talk"),
         }
     }
 }
@@ -39,10 +40,10 @@ impl FromStr for SdpSessionType {
 }
 
 pub fn generate_media_sdp(
-    media_server_ip: &String,
+    media_server_ip: &str,
     media_server_port: u16,
-    device_gb_code: &String,
-    setup_type: &String,
+    device_gb_code: &str,
+    setup_type: &str,
     session_type: SdpSessionType,
     start_ts: u64,
     stop_ts: u64,
@@ -73,20 +74,17 @@ pub fn generate_media_sdp(
             encoding_params: None,
         }),
         sdp_rs::lines::Attribute::Recvonly {},
-        sdp_rs::lines::Attribute::Other {
-            0: String::from("streamMode"),
-            1: Some(String::from("MAIN")),
-        },
+        sdp_rs::lines::Attribute::Other(String::from("streamMode"), Some(String::from("MAIN"))),
     ];
     if !setup_type.is_empty() {
-        attributes.push(sdp_rs::lines::Attribute::Other {
-            0: String::from("setup"),
-            1: Some(setup_type.clone()),
-        });
-        attributes.push(sdp_rs::lines::Attribute::Other {
-            0: String::from("connection"),
-            1: Some(String::from("new")),
-        });
+        attributes.push(sdp_rs::lines::Attribute::Other(
+            String::from("setup"),
+            Some(setup_type.to_string()),
+        ));
+        attributes.push(sdp_rs::lines::Attribute::Other(
+            String::from("connection"),
+            Some(String::from("new")),
+        ));
     }
 
     // media description
@@ -102,7 +100,7 @@ pub fn generate_media_sdp(
             },
             fmt: String::from("96 97 98 99"),
         },
-        attributes: attributes,
+        attributes,
         info: None,
         connections: vec![sdp_rs::lines::Connection {
             nettype: sdp_rs::lines::common::Nettype::In,
@@ -120,7 +118,7 @@ pub fn generate_media_sdp(
     let session_desc = sdp_rs::SessionDescription {
         version: sdp_rs::lines::Version::V0,
         origin: sdp_rs::lines::Origin {
-            username: device_gb_code.clone(),
+            username: device_gb_code.to_string(),
             sess_id: String::from("0"),
             sess_version: String::from("0"),
             nettype: sdp_rs::lines::common::Nettype::In,

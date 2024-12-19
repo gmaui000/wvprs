@@ -19,12 +19,10 @@ impl SipHandler {
     }
 
     pub fn tag_get(&self, from: &rsip::headers::From) -> String {
-        if let Ok(t) = from.tag() {
-            if let Some(tag) = t {
-                return tag.to_string();
-            }
+        if let Ok(Some(t)) = from.tag() {
+            return t.to_string();
         }
 
-        return String::new();
+        String::new()
     }
 }

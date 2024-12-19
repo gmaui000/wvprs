@@ -1,7 +1,4 @@
-use rsip::{
-    self,
-    prelude::ToTypedHeader,
-};
+use rsip::{self, prelude::ToTypedHeader};
 
 use crate::sip::handler::SipHandler;
 
@@ -9,7 +6,7 @@ impl SipHandler {
     pub fn via(&self, transport: rsip::Transport, branch: &String) -> rsip::headers::Via {
         rsip::typed::Via {
             version: rsip::Version::V2,
-            transport: transport,
+            transport,
             uri: rsip::Uri {
                 host_with_port: (self.ip.clone(), self.port).into(),
                 ..Default::default()
@@ -29,7 +26,7 @@ impl SipHandler {
             }
         }
 
-        return String::new();
+        String::new()
     }
 
     pub fn transport_get(&self, via: &rsip::headers::Via) -> rsip::Transport {
@@ -37,6 +34,6 @@ impl SipHandler {
             return tv.transport;
         }
 
-        return rsip::Transport::Udp;
+        rsip::Transport::Udp
     }
 }

@@ -1,7 +1,7 @@
-use serde::{Serialize, Deserialize};
+use local_ip_address::local_ip;
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
-use local_ip_address::local_ip;
 use sysinfo;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

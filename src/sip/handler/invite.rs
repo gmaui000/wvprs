@@ -63,7 +63,7 @@ impl SipHandler {
                     let mut headers: rsip::Headers = Default::default();
                     headers.push(response.via_header().unwrap().clone().into());
                     headers.push(response.from_header().unwrap().clone().into());
-                    headers.push(self.to_old(&response.to_header().unwrap()).into());
+                    headers.push(self.to_old(response.to_header().unwrap()).into());
                     headers.push(response.call_id_header().unwrap().clone().into());
                     headers.push(response.cseq_header().unwrap().clone().into());
                     headers.push(rsip::Header::ContentLength(Default::default()));
@@ -81,7 +81,8 @@ impl SipHandler {
                         body: Default::default(),
                     };
 
-                    self.socket_send_request(device_addr, tcp_stream, request).await;
+                    self.socket_send_request(device_addr, tcp_stream, request)
+                        .await;
                 }
             }
         }

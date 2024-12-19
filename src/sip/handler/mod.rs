@@ -55,9 +55,9 @@ impl SipHandler {
             algorithm: rsip::headers::auth::Algorithm::from_str(&config.sip_algorithm).unwrap(),
             nonce: config.sip_nonce.clone(),
             realm: config.sip_realm.clone(),
-            store: store,
-            sip_udp_socket: sip_udp_socket,
-            sip_tcp_listener: sip_tcp_listener,
+            store,
+            sip_udp_socket,
+            sip_tcp_listener,
         }
     }
 }
@@ -136,9 +136,7 @@ impl SipHandler {
                     rsip::Method::Cancel => {
                         self.on_req_cancel(device_addr, tcp_stream, request).await
                     }
-                    rsip::Method::Info => {
-                        self.on_req_info(device_addr, tcp_stream, request).await
-                    }
+                    rsip::Method::Info => self.on_req_info(device_addr, tcp_stream, request).await,
                     rsip::Method::Invite => {
                         self.on_req_invite(device_addr, tcp_stream, request).await
                     }

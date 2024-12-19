@@ -13,15 +13,14 @@ impl SipHandler {
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
         request: rsip::Request,
     ) -> bool {
-        return self
-            .socket_send(
-                addr,
-                tcp_stream,
-                request.to_string().as_bytes(),
-                request.to_string(),
-                "request",
-            )
-            .await;
+        self.socket_send(
+            addr,
+            tcp_stream,
+            request.to_string().as_bytes(),
+            request.to_string(),
+            "request",
+        )
+        .await
     }
 
     pub async fn socket_send_request_with_body(
@@ -33,9 +32,8 @@ impl SipHandler {
         str_body: String,
     ) -> bool {
         let (content, text) = self.build_content(request.to_string(), str_body, bin_body);
-        return self
-            .socket_send(addr, tcp_stream, content.as_slice(), text, "request")
-            .await;
+        self.socket_send(addr, tcp_stream, content.as_slice(), text, "request")
+            .await
     }
 
     pub async fn socket_send_response(
@@ -44,17 +42,16 @@ impl SipHandler {
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
         response: rsip::Response,
     ) -> bool {
-        return self
-            .socket_send(
-                addr,
-                tcp_stream,
-                response.to_string().as_bytes(),
-                response.to_string(),
-                "response",
-            )
-            .await;
+        self.socket_send(
+            addr,
+            tcp_stream,
+            response.to_string().as_bytes(),
+            response.to_string(),
+            "response",
+        )
+        .await
     }
-    
+
     pub async fn socket_send_response_with_body(
         &self,
         addr: std::net::SocketAddr,
@@ -64,9 +61,8 @@ impl SipHandler {
         str_body: String,
     ) -> bool {
         let (content, text) = self.build_content(response.to_string(), str_body, bin_body);
-        return self
-            .socket_send(addr, tcp_stream, content.as_slice(), text, "response")
-            .await;
+        self.socket_send(addr, tcp_stream, content.as_slice(), text, "response")
+            .await
     }
 
     pub async fn socket_send(
@@ -78,11 +74,10 @@ impl SipHandler {
         data_type: &str,
     ) -> bool {
         if let Some(stream) = tcp_stream {
-            return self
-                .tcp_socket_send(addr, stream, data, text, data_type)
-                .await;
+            self.tcp_socket_send(addr, stream, data, text, data_type)
+                .await
         } else {
-            return self.udp_socket_send(addr, data, text, data_type).await;
+            self.udp_socket_send(addr, data, text, data_type).await
         }
     }
 
@@ -103,7 +98,7 @@ impl SipHandler {
                     color::RESET,
                     text
                 );
-                return false;
+                false
             }
             Ok(amount) => {
                 tracing::info!(
@@ -116,7 +111,7 @@ impl SipHandler {
                     color::RESET,
                     text
                 );
-                return true;
+                true
             }
         }
     }
@@ -139,7 +134,7 @@ impl SipHandler {
                     color::RESET,
                     text
                 );
-                return false;
+                false
             }
             Ok(()) => {
                 tracing::info!(
@@ -152,7 +147,7 @@ impl SipHandler {
                     color::RESET,
                     text
                 );
-                return true;
+                true
             }
         }
     }
@@ -167,6 +162,6 @@ impl SipHandler {
         content.extend(headers.as_bytes());
         content.extend(bin_body);
 
-        return (content, format!("{headers}{str_body}"));
+        (content, format!("{headers}{str_body}"))
     }
 }

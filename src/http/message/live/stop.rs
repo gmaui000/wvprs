@@ -14,4 +14,3 @@ pub struct LiveStopResponse {
     pub gb_code: String,
     pub stream_id: u32,
 }
-

@@ -14,8 +14,21 @@ impl SipHandler {
     ) {
         if let Some(auth) = request.authorization_header() {
             if let Ok(auth) = auth.typed() {
-                if self.is_authorized(&auth.username, request.method(), &auth.uri, auth.qop.as_ref(), &auth.response) {
-                    let device_id = request.from_header().unwrap().uri().unwrap().user().unwrap().to_string();
+                if self.is_authorized(
+                    &auth.username,
+                    request.method(),
+                    &auth.uri,
+                    auth.qop.as_ref(),
+                    &auth.response,
+                ) {
+                    let device_id = request
+                        .from_header()
+                        .unwrap()
+                        .uri()
+                        .unwrap()
+                        .user()
+                        .unwrap()
+                        .to_string();
                     return self
                         .on_req_register_200(device_addr, tcp_stream, &request, &device_id)
                         .await;
@@ -23,9 +36,8 @@ impl SipHandler {
             }
         }
 
-        return self
-            .on_req_register_401(device_addr, tcp_stream, &request)
-            .await;
+        self.on_req_register_401(device_addr, tcp_stream, &request)
+            .await
     }
 
     async fn on_req_register_401(
@@ -60,7 +72,8 @@ impl SipHandler {
             body: Default::default(),
         };
 
-        self.socket_send_response(device_addr, tcp_stream, response).await;
+        self.socket_send_response(device_addr, tcp_stream, response)
+            .await;
     }
 
     async fn on_req_register_200(
@@ -74,7 +87,7 @@ impl SipHandler {
         if let Some(exp) = request.expires_header() {
             if let Ok(seconds) = exp.seconds() {
                 if 0 == seconds {
-                    self.store.unregister(&gb_code);
+                    self.store.unregister(gb_code);
                 } else {
                     is_register = true;
                     let branch = request
@@ -85,7 +98,8 @@ impl SipHandler {
                         .branch()
                         .unwrap()
                         .to_string();
-                    self.store.register(&branch, &gb_code, device_addr, &tcp_stream);
+                    self.store
+                        .register(&branch, gb_code, device_addr, &tcp_stream);
                 }
             }
         }
@@ -106,7 +120,8 @@ impl SipHandler {
         };
 
         let tcp_stream_ref = tcp_stream.clone();
-        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response).await;
+        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response)
+            .await;
 
         if is_register {
             let via = request.via_header().unwrap();

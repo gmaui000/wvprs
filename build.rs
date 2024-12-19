@@ -1,18 +1,18 @@
 use regex::Regex;
 use std::fs;
+use std::io;
 use std::path::Path;
 use std::process::Command;
-use std::io;
 
 fn main() -> io::Result<()> {
     replace_version_in_rs()?;
 
     println!("cargo:rerun-if-changed=src/proto/gss.proto");
     tonic_build::configure()
-       .type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]")
-       .compile_well_known_types(true)
-       .compile_protos(&["src/proto/gss.proto"], &["proto"])
-       .unwrap();
+        .type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]")
+        .compile_well_known_types(true)
+        .compile_protos(&["src/proto/gss.proto"], &["proto"])
+        .unwrap();
     Ok(())
 }
 
@@ -28,7 +28,7 @@ fn replace_version_in_rs() -> io::Result<()> {
         Regex::new(r#"pub static APP_VERSION: &str = "([0-9a-f]{7})\.(\d{8})\.(\d{6})";"#).unwrap();
     let version_replacement = format!(r#"pub static APP_VERSION: &str = "{}";"#, latest_version);
     let file = String::from("./src/version.rs");
-    if!Path::new(&file).exists() {
+    if !Path::new(&file).exists() {
         let mut text = String::from(r#"pub static APP_NAME: &str = "wvprs";"#);
         text += "\n";
         text += &version_replacement;
@@ -38,8 +38,11 @@ fn replace_version_in_rs() -> io::Result<()> {
     println!("file: {}", &file);
     let original_content = fs::read_to_string(&file)?;
     let replaced_content = version_regex.replace_all(&original_content, &version_replacement);
-    if original_content!= replaced_content {
-        println!("std::fs::write, file: {}, version: {}", &file, &latest_version);
+    if original_content != replaced_content {
+        println!(
+            "std::fs::write, file: {}, version: {}",
+            &file, &latest_version
+        );
         fs::write(&file, replaced_content.as_ref())?;
     }
     Ok(())
@@ -48,7 +51,7 @@ fn replace_version_in_rs() -> io::Result<()> {
 fn get_latest_git_commit_hash(short: bool) -> io::Result<String> {
     // Run Git command to get the latest commit hash
     let output = Command::new("git")
-       .args(&[
+        .args([
             "log",
             "-1",
             if short {
@@ -57,14 +60,14 @@ fn get_latest_git_commit_hash(short: bool) -> io::Result<String> {
                 "--pretty=format:%H"
             },
         ])
-       .output()?;
+        .output()?;
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
 
 fn get_latest_git_commit_time() -> io::Result<String> {
     // Run Git command to get the latest commit hash
     let output = Command::new("git")
-       .args(&["log", "-1", "--format=%ad", "--date=format:%Y%m%d.%H%M%S"])
-       .output()?;
+        .args(["log", "-1", "--format=%ad", "--date=format:%Y%m%d.%H%M%S"])
+        .output()?;
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }

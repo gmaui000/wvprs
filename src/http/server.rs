@@ -23,11 +23,7 @@ pub async fn run_forever(
     .bind((config.host.clone(), config.http_port))
     {
         Ok(h) => {
-            tracing::info!(
-                "HttpServer::bind({}:{}) ok",
-                &config.host,
-                config.http_port
-            );
+            tracing::info!("HttpServer::bind({}:{}) ok", &config.host, config.http_port);
             h.run().await
         }
         Err(e) => {
@@ -37,7 +33,7 @@ pub async fn run_forever(
                 config.http_port,
                 e
             );
-            return Err(e);
+            Err(e)
         }
     }
 }

@@ -59,12 +59,11 @@ impl SipHandler {
                 ..Default::default()
             },
             version: rsip::Version::V2,
-            headers: headers,
+            headers,
             body: Default::default(),
         };
 
-        return self
-            .socket_send_request(device_addr, tcp_stream, request)
-            .await;
+        self.socket_send_request(device_addr, tcp_stream, request)
+            .await
     }
 }

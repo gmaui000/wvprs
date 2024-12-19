@@ -12,17 +12,13 @@ pub static CONTENT_LENGTH_BYTES: &[u8; 15] = b"Content-Length:";
 pub async fn bind(
     config: &Config,
 ) -> Result<(tokio::net::UdpSocket, tokio::net::TcpListener), std::io::Error> {
-    let local_addr = format!(
-        "{host}:{port}",
-        host = config.host,
-        port = config.sip_port
-    );
+    let local_addr = format!("{host}:{port}", host = config.host, port = config.sip_port);
 
     // udp server
     match tokio::net::UdpSocket::bind(&local_addr).await {
         Err(e) => {
             tracing::error!("UdpSocket::bind({}) error, e: {:?}", &local_addr, e);
-            return Err(e);
+            Err(e)
         }
         Ok(udp_socket) => {
             tracing::info!("UdpSocket::bind({}) ok", &local_addr);
@@ -31,11 +27,11 @@ pub async fn bind(
             match tokio::net::TcpListener::bind(&local_addr).await {
                 Err(e) => {
                     tracing::error!("TcpListener::bind({}) error, e: {:?}", &local_addr, e);
-                    return Err(e);
+                    Err(e)
                 }
                 Ok(tcp_listener) => {
                     tracing::info!("TcpListener::bind({}) ok", &local_addr);
-                    return Ok((udp_socket, tcp_listener));
+                    Ok((udp_socket, tcp_listener))
                 }
             }
         }
@@ -44,8 +40,7 @@ pub async fn bind(
 
 fn parse_sip_message(buffer: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
     // kmp search content-length
-    if let Some(mut content_length_begin_pos) =
-        Kmp::find_first_target(buffer, CONTENT_LENGTH_BYTES)
+    if let Some(mut content_length_begin_pos) = Kmp::find_first_target(buffer, CONTENT_LENGTH_BYTES)
     {
         content_length_begin_pos += CONTENT_LENGTH_BYTES.len();
 
@@ -129,10 +124,7 @@ pub async fn run_forever(
 
                         loop {
                             let mut recv_buff = vec![0; 1024];
-                            let n = match tcp_stream_reader
-                                .read(&mut recv_buff)
-                                .await
-                            {
+                            let n = match tcp_stream_reader.read(&mut recv_buff).await {
                                 Ok(0) => return, // connection closed
                                 Ok(n) => n,
                                 Err(e) => {
@@ -162,5 +154,5 @@ pub async fn run_forever(
 
     let _ = tokio::join!(udp_server_handle, tcp_server_handle);
 
-    return Ok(());
+    Ok(())
 }

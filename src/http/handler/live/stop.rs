@@ -3,6 +3,7 @@ use actix_web::{post, web, Responder};
 use crate::{
     http::message::live::stop::{LiveStopRequest, LiveStopResponse},
     sip::handler::SipHandler,
+    store::ByeResult,
 };
 
 use crate::gss;
@@ -12,19 +13,19 @@ async fn post_stop(
     data: web::Json<LiveStopRequest>,
     sip_handler: web::Data<std::sync::Arc<SipHandler>>,
 ) -> impl Responder {
-    if let Some((
-        by_to_device,
+    if let Some(ByeResult {
+        success,
         call_id,
         branch,
-        device_addr,
+        socket_addr,
         tcp_stream,
         stream_server_ip,
         stream_server_port,
-    )) = sip_handler.store.bye(&data.gb_code, data.stream_id)
+    }) = sip_handler.store.bye(&data.gb_code, data.stream_id)
     {
-        if by_to_device {
+        if success {
             sip_handler
-                .send_bye(device_addr, tcp_stream, &branch, &call_id, &data.gb_code)
+                .send_bye(socket_addr, tcp_stream, &branch, &call_id, &data.gb_code)
                 .await;
         }
 
@@ -39,11 +40,12 @@ async fn post_stop(
                 let mut client =
                     gss::gbt_stream_service_client::GbtStreamServiceClient::new(channel);
 
-                let mut req = gss::FreeStreamPortRequest::default();
-                req.gb_code = data.gb_code.clone();
-                req.stream_id = data.stream_id;
-                req.media_server_ip = stream_server_ip;
-                req.media_server_port = stream_server_port as u32;
+                let req = gss::FreeStreamPortRequest {
+                    gb_code: data.gb_code.clone(),
+                    stream_id: data.stream_id,
+                    media_server_ip: stream_server_ip,
+                    media_server_port: stream_server_port as u32,
+                };
                 match client.free_stream_port(req).await {
                     Err(e) => {
                         tracing::error!("grpc free_stream_port error, e: {:?}", e);

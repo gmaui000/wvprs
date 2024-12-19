@@ -19,24 +19,20 @@ pub struct KeepAlive {
 impl KeepAlive {
     pub fn serialize_to_xml(&self) -> String {
         match to_string(self) {
-            Ok(s) => {
-                return s;
-            }
+            Ok(s) => s,
             Err(e) => {
                 tracing::error!("serde_xml_rs::to_string({:?}) error, e: {:?}", self, e);
-                return String::new();
+                String::new()
             }
         }
     }
 
     pub fn deserialize_from_xml(s: String) -> Self {
-        match from_str(&s.as_str()) {
-            Ok(k) => {
-                return k;
-            }
+        match from_str(s.as_str()) {
+            Ok(k) => k,
             Err(e) => {
                 tracing::error!("serde_xml_rs::from_str({}) error, e: {:?}", s, e);
-                return KeepAlive::default();
+                KeepAlive::default()
             }
         }
     }

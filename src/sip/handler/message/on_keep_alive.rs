@@ -43,6 +43,7 @@ impl SipHandler {
         };
 
         let tcp_stream_ref = &tcp_stream;
-        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response).await;
+        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response)
+            .await;
     }
 }

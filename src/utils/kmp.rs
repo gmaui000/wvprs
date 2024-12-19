@@ -1,4 +1,4 @@
-pub struct Kmp {}
+pub struct Kmp;
 
 impl Kmp {
     /// 查找目标字节切片在数据字节切片中首次出现的位置
@@ -10,16 +10,19 @@ impl Kmp {
         let combined = Self::combine_data_and_target(target, data);
         let lps = Self::compute_lps(&combined);
 
-        let data_length = data.len();
         let target_length = target.len();
 
-        for i in (target_length + 1)..=(data_length + target_length) {
-            if lps[i] == target_length {
-                return Some(i - 2 * target_length);
-            }
-        }
-
-        None
+        // 遍历 lps 数组，查找匹配的位置
+        lps[target_length..]
+            .iter()
+            .enumerate()
+            .find_map(|(i, &len)| {
+                if len == target_length {
+                    Some(i + target_length - 2 * target_length)
+                } else {
+                    None
+                }
+            })
     }
 
     /// 查找目标字节切片在数据字节切片中所有出现的位置
@@ -31,17 +34,19 @@ impl Kmp {
         let combined = Self::combine_data_and_target(target, data);
         let lps = Self::compute_lps(&combined);
 
-        let data_length = data.len();
         let target_length = target.len();
 
-        let mut targets = vec![];
-        for i in (target_length + 1)..=(data_length + target_length) {
-            if lps[i] == target_length {
-                targets.push(i - 2 * target_length);
-            }
-        }
-
-        targets
+        lps[target_length..]
+            .iter()
+            .enumerate()
+            .filter_map(|(i, &len)| {
+                if len == target_length {
+                    Some(i + target_length - 2 * target_length)
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
 
     /// 合并目标字节切片和数据字节切片，并添加分隔符
@@ -60,7 +65,7 @@ impl Kmp {
         let mut prefix_end = 0;
 
         for i in 1..n {
-            while prefix_end > 0 && data[i]!= data[prefix_end] {
+            while prefix_end > 0 && data[i] != data[prefix_end] {
                 prefix_end = lps[prefix_end - 1];
             }
             if data[i] == data[prefix_end] {

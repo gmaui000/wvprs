@@ -11,9 +11,8 @@ impl SipHandler {
         gb_code: &String,
     ) -> bool {
         // body
-        let text_body =
-            sip::message::CatalogQuery::new(self.store.add_fetch_global_sn(), gb_code)
-                .serialize_to_xml();
+        let text_body = sip::message::CatalogQuery::new(self.store.add_fetch_global_sn(), gb_code)
+            .serialize_to_xml();
         let bin_body = self.encode_body(&text_body);
 
         // headers
@@ -41,9 +40,9 @@ impl SipHandler {
         headers.push(
             rsip::typed::ContentType(rsip::headers::typed::MediaType::Other(
                 "Application/MANSCDP+xml".into(),
-                vec![]
+                vec![],
             ))
-            .into()
+            .into(),
         );
         headers.push(rsip::headers::ContentLength::from(bin_body.len() as u32).into());
 
@@ -57,12 +56,11 @@ impl SipHandler {
                 ..Default::default()
             },
             version: rsip::Version::V2,
-            headers: headers,
+            headers,
             body: Default::default(),
         };
 
-        return self
-            .socket_send_request_with_body(device_addr, tcp_stream, request, bin_body, text_body)
-            .await;
+        self.socket_send_request_with_body(device_addr, tcp_stream, request, bin_body, text_body)
+            .await
     }
 }

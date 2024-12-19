@@ -32,7 +32,7 @@ impl SipHandler {
             body: Default::default(),
         };
 
-        self.socket_send_response(device_addr, tcp_stream.as_ref().cloned(), response).await;
-
+        self.socket_send_response(device_addr, tcp_stream.as_ref().cloned(), response)
+            .await;
     }
 }

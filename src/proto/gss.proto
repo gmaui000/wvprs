@@ -14,7 +14,6 @@ enum StreamSetupType {
     active = 3;
 }
 
-
 enum ResponseCode {
     ok = 0;
     no_ports_free = 1;
@@ -22,13 +21,11 @@ enum ResponseCode {
     run_stream_service_error = 3;
 }
 
-
 message BindStreamPortRequest {
     string gb_code = 1;
     uint32 stream_id = 2;
     StreamSetupType setup_type = 3;
 }
-
 
 message BindStreamPortResponse {
     ResponseCode code = 1;
@@ -37,7 +34,6 @@ message BindStreamPortResponse {
     uint32 media_server_port = 4;
 }
 
-
 message FreeStreamPortRequest {
     string gb_code = 1;
     uint32 stream_id = 2;
@@ -45,9 +41,7 @@ message FreeStreamPortRequest {
     uint32 media_server_port = 4;
 }
 
-
 message FreeStreamPortResponse {
     ResponseCode code = 1;
     string message = 2;
 }
-

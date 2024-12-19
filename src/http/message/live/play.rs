@@ -14,4 +14,3 @@ pub struct LivePlayResponse {
     pub gb_code: String,
     pub stream_id: u32,
 }
-

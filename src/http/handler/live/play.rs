@@ -5,6 +5,7 @@ use tonic;
 use crate::{
     http::message::live::play::{LivePlayRequest, LivePlayResponse},
     sip::{self, handler::SipHandler},
+    store::InviteResult,
 };
 
 use crate::gss;
@@ -16,13 +17,18 @@ async fn post_play(
 ) -> impl Responder {
     let (mut code, mut msg) = (200, "OK");
 
-    let mut stream_id = 0;
+    let mut id = 0;
     let call_id = sip_handler.caller_id_str();
     match sip_handler.store.invite(&data.gb_code, &call_id, true) {
         None => (code, msg) = (404, "ipc device not found"),
-        Some((is_playing, id, branch, device_addr, tcp_stream)) => {
-            stream_id = id;
-
+        Some(InviteResult {
+            success,
+            stream_id,
+            branch,
+            socket_addr,
+            tcp_stream,
+        }) => {
+            id = stream_id;
             match tonic::transport::Channel::builder("tcp://127.0.0.1:7080".parse().unwrap())
                 .connect()
                 .await
@@ -34,12 +40,13 @@ async fn post_play(
                     let mut client =
                         gss::gbt_stream_service_client::GbtStreamServiceClient::new(channel);
 
-                    let mut req = gss::BindStreamPortRequest::default();
-                    req.gb_code = data.gb_code.clone();
-                    req.stream_id = stream_id;
-                    req.setup_type = gss::StreamSetupType::from_str_name(&data.setup_type)
-                        .unwrap_or(gss::StreamSetupType::Udp)
-                        as i32;
+                    let req = gss::BindStreamPortRequest {
+                        gb_code: data.gb_code.clone(),
+                        stream_id,
+                        setup_type: gss::StreamSetupType::from_str_name(&data.setup_type)
+                            .unwrap_or(gss::StreamSetupType::Udp)
+                            as i32,
+                    };
                     match client.bind_stream_port(req).await {
                         Err(e) => {
                             tracing::error!("grpc bind_stream_port error, e: {:?}", e);
@@ -54,23 +61,23 @@ async fn post_play(
                                     resp.media_server_port as u16,
                                 );
 
-                                if is_playing {
+                                if success {
                                     // dispatch
                                 }
                                 sip_handler
-                                    .send_invite(
-                                        device_addr,
+                                    .send_invite(sip::request::invite::SendInviteParams {
+                                        device_addr: socket_addr,
                                         tcp_stream,
-                                        &branch,
-                                        &call_id,
-                                        &String::from(resp.media_server_ip),
-                                        resp.media_server_port as u16,
-                                        sip::message::sdp::SdpSessionType::Play,
-                                        &data.gb_code,
-                                        &data.setup_type,
-                                        0,
-                                        0,
-                                    )
+                                        branch,
+                                        caller_id: call_id,
+                                        media_server_ip: resp.media_server_ip,
+                                        media_server_port: resp.media_server_port as u16,
+                                        session_type: sip::message::sdp::SdpSessionType::Play,
+                                        gb_code: data.gb_code.clone(),
+                                        setup_type: data.setup_type.clone(),
+                                        start_ts: 0,
+                                        stop_ts: 0,
+                                    })
                                     .await;
                             }
                         }
@@ -82,10 +89,10 @@ async fn post_play(
 
     let result = LivePlayResponse {
         locate: format!("{}#L{}", file!(), line!()),
-        code: code,
+        code,
         msg: msg.to_string(),
         gb_code: data.gb_code.clone(),
-        stream_id: stream_id,
+        stream_id: id,
     };
     web::Json(result)
 }

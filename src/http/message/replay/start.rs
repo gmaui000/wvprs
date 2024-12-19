@@ -16,4 +16,3 @@ pub struct ReplayStartResponse {
     pub gb_code: String,
     pub stream_id: u32,
 }
-

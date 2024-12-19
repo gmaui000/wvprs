@@ -1,6 +1,6 @@
-use rsip::{self, prelude::HeadersExt};
 use super::SipHandler;
 use crate::sip::message::Catalog;
+use rsip::{self, prelude::HeadersExt};
 
 impl SipHandler {
     pub async fn on_catalog(
@@ -48,6 +48,7 @@ impl SipHandler {
         };
 
         let tcp_stream_ref = &tcp_stream;
-        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response).await;
+        self.socket_send_response(device_addr, tcp_stream_ref.clone(), response)
+            .await;
     }
 }

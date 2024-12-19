@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": true, // 保存时自动格式化
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer" // 使用 rust-analyzer 作为格式化工具
+    },
+    "rust-analyzer.rustfmt.extraArgs": [], // 可选，传递额外参数给 rustfmt
+    "rust-analyzer.checkOnSave.command": "clippy" // 可选，保存时使用 clippy 检查代码
+}

@@ -1,6 +1,6 @@
+pub mod on_catalog;
 pub mod on_device_status;
 pub mod on_keep_alive;
-pub mod on_catalog;
 
 use regex::Regex;
 
@@ -28,8 +28,7 @@ impl SipHandler {
                     .await;
             }
             "Catalog" => {
-                self.on_catalog(device_addr, tcp_stream, request, msg)
-                    .await;
+                self.on_catalog(device_addr, tcp_stream, request, msg).await;
             }
             _ => {}
         }
@@ -43,14 +42,14 @@ impl SipHandler {
     ) {
     }
 
-    fn extract_cmd_type(&self, body: &String) -> String {
+    fn extract_cmd_type(&self, body: &str) -> String {
         let regex = Regex::new(r"<CmdType>(\w+)</CmdType>").unwrap();
-        if let Some(matches) = regex.captures(&body) {
+        if let Some(matches) = regex.captures(body) {
             if let Some(s) = matches.get(1).map(|m| m.as_str()) {
                 return String::from(s);
             }
         }
 
-        return String::new();
+        String::new()
     }
 }
