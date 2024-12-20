@@ -1,4 +1,5 @@
 pub mod on_catalog;
+pub mod on_device_info;
 pub mod on_device_status;
 pub mod on_keep_alive;
 

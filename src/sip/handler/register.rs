@@ -133,6 +133,24 @@ impl SipHandler {
                 gb_code,
             )
             .await;
+
+            self.send_device_info_query(
+                device_addr,
+                tcp_stream_ref.clone(),
+                self.transport_get(via),
+                &self.branch_get(via),
+                gb_code,
+            )
+            .await;
+
+            self.send_device_status_query(
+                device_addr,
+                tcp_stream_ref.clone(),
+                self.transport_get(via),
+                &self.branch_get(via),
+                gb_code,
+            )
+            .await;
         }
     }
 
