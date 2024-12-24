@@ -16,12 +16,16 @@ async fn post_start(
 
     let mut id = 0;
     let call_id = sip_handler.caller_id_str();
-    match sip_handler.store.invite(&data.gb_code, &call_id, true) {
+    match sip_handler
+        .store
+        .invite(&data.gb_code, &data.channel_id, &call_id, true)
+    {
         None => (code, msg) = (404, "ipc device not found"),
         Some(InviteResult {
             success,
             stream_id,
             branch,
+            channel_id,
             socket_addr,
             tcp_stream,
         }) => {
@@ -67,6 +71,7 @@ async fn post_start(
                                         device_addr: socket_addr,
                                         tcp_stream,
                                         branch,
+                                        channel_id,
                                         caller_id: call_id,
                                         media_server_ip: String::from("127.0.0.1"),
                                         media_server_port: 7080,

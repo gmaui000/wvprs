@@ -17,12 +17,16 @@ async fn post_play(
 ) -> impl Responder {
     let (mut code, mut msg) = (200, "OK");
 
-    let mut id = 0;
+    let mut id: u32 = 0;
     let call_id = sip_handler.caller_id_str();
-    match sip_handler.store.invite(&data.gb_code, &call_id, true) {
+    match sip_handler
+        .store
+        .invite(&data.gb_code, &data.channel_id, &call_id, true)
+    {
         None => (code, msg) = (404, "ipc device not found"),
         Some(InviteResult {
             success,
+            channel_id,
             stream_id,
             branch,
             socket_addr,
@@ -69,6 +73,7 @@ async fn post_play(
                                         device_addr: socket_addr,
                                         tcp_stream,
                                         branch,
+                                        channel_id,
                                         caller_id: call_id,
                                         media_server_ip: resp.media_server_ip,
                                         media_server_port: resp.media_server_port as u16,

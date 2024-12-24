@@ -3,12 +3,68 @@ pub mod mysql;
 pub mod not_impl;
 pub mod redis;
 
+use crate::sip::message::Catalog;
 use crate::utils::config::Config;
 use std::net::SocketAddr;
 use std::sync::mpsc;
 use std::sync::Arc;
 use tokio::net::tcp::OwnedWriteHalf;
 use tokio::sync::Mutex;
+
+// 定义存储在 sip_devices 中的设备信息结构体
+#[derive(Debug)]
+pub struct SipDeviceInfo {
+    // 分支信息
+    pub branch: String,
+    // UDP 客户端地址
+    pub udp_client_addr: SocketAddr,
+    // TCP 流写入器的可选引用
+    pub tcp_stream_writer: Option<Arc<Mutex<OwnedWriteHalf>>>,
+    // 时间戳
+    pub ts: u32,
+    // 子设备
+    pub sub_devices: Option<Vec<SipSubDeviceInfo>>,
+}
+
+// 定义存储在 sip_devices 中的设备信息结构体
+#[derive(Debug)]
+pub struct SipSubDeviceInfo {
+    pub sub_device_id: String,
+    pub name: String,
+    pub manufacturer: String,
+    pub model: String,
+    pub owner: String,
+    pub civil_code: String,
+    pub block: String,
+    pub address: String,
+    pub parental: u32,
+    pub parent_id: String,
+    pub register_way: u32,
+    pub secrecy: u32,
+    pub ip_address: String,
+    pub port: u16,
+    pub password: String,
+    pub status: String,
+    pub longitude: f64,
+    pub latitude: f64,
+    pub ptz_type: u32,
+}
+
+// 定义存储在 gb_streams 中的流信息结构体
+#[derive(Debug, Default)]
+pub struct GbStreamInfo {
+    // gb_code, _caller_id, _stream_server_ip, _stream_server_port, ts
+    // 设备的 gb_code
+    pub gb_code: String,
+    // 调用者 ID
+    pub caller_id: String,
+    // 流媒体 IP
+    pub stream_server_ip: String,
+    // 流媒体 PORT
+    pub stream_server_port: u16,
+    // 时间戳
+    pub ts: u32,
+}
 
 // 用于表示设备信息的结构体
 pub struct DeviceInfo {
@@ -27,6 +83,7 @@ pub struct StreamInfo {
 // 用于表示 invite 操作的返回结果的结构体
 pub struct InviteResult {
     pub success: bool,
+    pub channel_id: String,
     pub stream_id: u32,
     pub branch: String,
     pub socket_addr: SocketAddr,
@@ -75,6 +132,10 @@ pub trait StoreEngine: Send + Sync {
         None
     }
 
+    fn find_gb_code_by_caller_id(&self, _key: &str) -> Option<String> {
+        None
+    }
+
     fn find_gb_code(&self, _stream_id: u32) -> String {
         String::new()
     }
@@ -97,7 +158,17 @@ pub trait StoreEngine: Send + Sync {
         false
     }
 
-    fn invite(&self, _gb_code: &str, _caller_id: &str, _is_live: bool) -> Option<InviteResult> {
+    fn save_catalog(&self, _gb_code: &str, _data: Catalog) -> bool {
+        false
+    }
+
+    fn invite(
+        &self,
+        _gb_code: &str,
+        _channel_id: &str,
+        _caller_id: &str,
+        _is_live: bool,
+    ) -> Option<InviteResult> {
         None
     }
 

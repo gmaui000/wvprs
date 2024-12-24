@@ -1,45 +1,16 @@
 use tokio;
 
 use dashmap::DashMap;
-use std::net::SocketAddr;
 use std::sync::atomic::AtomicU32;
 use std::sync::Arc;
-use tokio::net::tcp::OwnedWriteHalf;
 use tokio::sync::Mutex;
 use uuid::Uuid;
 
 use super::StoreEngine;
+use super::{GbStreamInfo, SipDeviceInfo, SipSubDeviceInfo};
+use crate::sip::message::Catalog;
 
 use crate::utils::config::Config;
-
-// 定义存储在 sip_devices 中的设备信息结构体
-#[derive(Debug)]
-pub struct SipDeviceInfo {
-    // 分支信息
-    pub branch: String,
-    // UDP 客户端地址
-    pub udp_client_addr: SocketAddr,
-    // TCP 流写入器的可选引用
-    pub tcp_stream_writer: Option<Arc<Mutex<OwnedWriteHalf>>>,
-    // 时间戳
-    pub ts: u32,
-}
-
-// 定义存储在 gb_streams 中的流信息结构体
-#[derive(Debug, Default)]
-pub struct GbStreamInfo {
-    // gb_code, _caller_id, _stream_server_ip, _stream_server_port, ts
-    // 设备的 gb_code
-    pub gb_code: String,
-    // 调用者 ID
-    pub caller_id: String,
-    // 流媒体 IP
-    pub stream_server_ip: String,
-    // 流媒体 PORT
-    pub stream_server_port: u16,
-    // 时间戳
-    pub ts: u32,
-}
 
 pub struct MemoryStore {
     pub quit_flag: bool,
@@ -140,6 +111,19 @@ impl StoreEngine for MemoryStore {
         None
     }
 
+    fn find_gb_code_by_caller_id(&self, key: &str) -> Option<String> {
+        for entry in self.gb_streams.iter() {
+            let (_, stream) = entry.pair();
+            let GbStreamInfo {
+                gb_code, caller_id, ..
+            } = stream;
+            if key == caller_id {
+                return Some(gb_code.to_string());
+            }
+        }
+        None
+    }
+
     fn find_gb_code(&self, stream_id: u32) -> String {
         if let Some(stream) = self.gb_streams.get(&stream_id) {
             let GbStreamInfo { gb_code, .. } = stream.value();
@@ -169,6 +153,7 @@ impl StoreEngine for MemoryStore {
                     udp_client_addr: socket_addr,
                     tcp_stream_writer: tcp_stream.as_ref().cloned(),
                     ts,
+                    sub_devices: None,
                 },
             );
             return true;
@@ -197,7 +182,51 @@ impl StoreEngine for MemoryStore {
         false
     }
 
-    fn invite(&self, gb_code: &str, caller_id: &str, is_live: bool) -> Option<super::InviteResult> {
+    fn save_catalog(&self, gb_code: &str, data: Catalog) -> bool {
+        let entry = self.sip_devices.entry(gb_code.to_string());
+        if let dashmap::Entry::Occupied(mut device_entry) = entry {
+            let device_info = device_entry.get_mut();
+            if device_info.sub_devices.is_none() {
+                device_info.sub_devices = Some(Vec::new());
+            }
+            if let Some(sub_devices) = &mut device_info.sub_devices {
+                for device in data.device_list.items {
+                    let sub_device_info = SipSubDeviceInfo {
+                        sub_device_id: device.device_id,
+                        name: device.name,
+                        manufacturer: device.manufacturer,
+                        model: device.model,
+                        owner: device.owner,
+                        civil_code: device.civil_code,
+                        block: device.block,
+                        address: device.address,
+                        parental: device.parental,
+                        parent_id: device.parent_id,
+                        register_way: device.register_way,
+                        secrecy: device.secrecy,
+                        ip_address: device.ip_address,
+                        port: device.port,
+                        password: device.password,
+                        status: device.status,
+                        longitude: device.longitude,
+                        latitude: device.latitude,
+                        ptz_type: device.ptz_type,
+                    };
+                    sub_devices.push(sub_device_info);
+                }
+                return true;
+            }
+        }
+        false
+    }
+
+    fn invite(
+        &self,
+        gb_code: &str,
+        channel_id: &str,
+        caller_id: &str,
+        is_live: bool,
+    ) -> Option<super::InviteResult> {
         let result = self.find_device_by_gb_code(gb_code);
         result.as_ref()?;
         let super::DeviceInfo {
@@ -241,6 +270,7 @@ impl StoreEngine for MemoryStore {
 
         Some(super::InviteResult {
             success: is_playing,
+            channel_id: channel_id.to_string(),
             stream_id,
             branch,
             socket_addr,

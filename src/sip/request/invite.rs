@@ -11,6 +11,7 @@ pub struct SendInviteParams {
     pub device_addr: SocketAddr,
     pub tcp_stream: Option<Arc<Mutex<OwnedWriteHalf>>>,
     pub branch: String,
+    pub channel_id: String,
     pub caller_id: String,
     pub media_server_ip: String,
     pub media_server_port: u16,
@@ -28,6 +29,7 @@ impl SipHandler {
             device_addr,
             tcp_stream,
             branch,
+            channel_id,
             caller_id,
             media_server_ip,
             media_server_port,
@@ -51,8 +53,9 @@ impl SipHandler {
         let bin_body = str_body.as_bytes().to_vec();
 
         // headers
-        let mut _headers = self.build_headers(
+        let headers = self.build_headers(
             &branch,
+            &channel_id,
             &caller_id,
             &gb_code,
             tcp_stream.as_ref(),
@@ -60,7 +63,7 @@ impl SipHandler {
         );
 
         // request
-        let request = self.build_request(&gb_code, &branch, &bin_body);
+        let request = self.build_request(&gb_code, &headers, &bin_body);
 
         self.socket_send_request_with_body(device_addr, tcp_stream, request, bin_body, str_body)
             .await
@@ -69,6 +72,7 @@ impl SipHandler {
     fn build_headers(
         &self,
         branch: &str,
+        channel_id: &str,
         caller_id: &str,
         gb_code: &str,
         tcp_stream: Option<&Arc<Mutex<OwnedWriteHalf>>>,
@@ -113,7 +117,7 @@ impl SipHandler {
             .into(),
         );
         headers.push(rsip::headers::Supported::from(String::from("100rel")).into());
-        headers.push(rsip::headers::Subject::from(format!("{gb_code}:0")).into());
+        headers.push(rsip::headers::Subject::from(format!("{channel_id}:0")).into());
         headers.push(
             rsip::headers::UserAgent::from(format!(
                 "{} {}",
@@ -122,12 +126,17 @@ impl SipHandler {
             ))
             .into(),
         );
-        headers.push(rsip::headers::ContentType::from("application/sdp").into());
+        headers.push(rsip::headers::ContentType::from("APPLICATION/SDP").into());
         headers.push(rsip::headers::ContentLength::from(str_body.len() as u32).into());
         headers
     }
 
-    fn build_request(&self, gb_code: &str, _branch: &str, _bin_body: &[u8]) -> rsip::Request {
+    fn build_request(
+        &self,
+        gb_code: &str,
+        headers: &rsip::Headers,
+        _bin_body: &[u8],
+    ) -> rsip::Request {
         rsip::Request {
             method: rsip::Method::Invite,
             uri: rsip::Uri {
@@ -137,7 +146,7 @@ impl SipHandler {
                 ..Default::default()
             },
             version: rsip::Version::V2,
-            headers: Default::default(),
+            headers: headers.clone(),
             body: Default::default(),
         }
     }

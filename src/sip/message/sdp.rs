@@ -69,7 +69,7 @@ pub fn generate_media_sdp(
         }),
         sdp_rs::lines::Attribute::Rtpmap(sdp_rs::lines::attribute::Rtpmap {
             payload_type: 99,
-            encoding_name: String::from("HEVC"),
+            encoding_name: String::from("H265"),
             clock_rate: 90000,
             encoding_params: None,
         }),
@@ -142,7 +142,15 @@ pub fn generate_media_sdp(
         attributes: vec![],
         emails: vec![],
         phones: vec![],
-        connection: None,
+        connection: Some(sdp_rs::lines::Connection {
+            nettype: sdp_rs::lines::common::Nettype::In,
+            addrtype: sdp_rs::lines::common::Addrtype::Ip4,
+            connection_address: sdp_rs::lines::connection::ConnectionAddress {
+                base: std::net::IpAddr::V4(std::net::Ipv4Addr::from_str(media_server_ip).unwrap()),
+                ttl: None,
+                numaddr: None,
+            },
+        }),
         bandwidths: vec![],
         key: None,
     };

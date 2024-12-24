@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct ReplayStartRequest {
     pub gb_code: String,
     pub setup_type: String,
+    pub channel_id: String,
     pub start_ts: u64,
     pub stop_ts: u64,
 }

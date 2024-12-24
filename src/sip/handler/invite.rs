@@ -1,6 +1,9 @@
 use std::str::FromStr;
 
-use rsip::{self, prelude::HeadersExt};
+use rsip::{
+    self,
+    prelude::{HeadersExt, UntypedHeader},
+};
 
 use sdp_rs;
 
@@ -53,13 +56,11 @@ impl SipHandler {
             Err(e) => {
                 tracing::error!("sdp_rs::SessionDescription::from_str error, e: {:?}", e);
             }
-            Ok(media_desc) => {
-                let gb_code = media_desc.origin.username;
-                if gb_code.is_empty() {
-                    tracing::error!("invalid device");
-                } else if self.store.find_device_by_gb_code(&gb_code).is_none() {
-                    tracing::error!("device not found");
-                } else {
+            Ok(_) => {
+                if let Some(gb_code) = self
+                    .store
+                    .find_gb_code_by_caller_id(response.call_id_header().unwrap().clone().value())
+                {
                     let mut headers: rsip::Headers = Default::default();
                     headers.push(response.via_header().unwrap().clone().into());
                     headers.push(response.from_header().unwrap().clone().into());
@@ -83,6 +84,8 @@ impl SipHandler {
 
                     self.socket_send_request(device_addr, tcp_stream, request)
                         .await;
+                } else {
+                    tracing::error!("device not found: {}", device_addr);
                 }
             }
         }

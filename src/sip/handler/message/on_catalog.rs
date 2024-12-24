@@ -16,7 +16,7 @@ impl SipHandler {
             self.store.set_global_sn(data.sn);
         }
 
-        let _gb_code = request
+        let gb_code = request
             .from_header()
             .unwrap()
             .uri()
@@ -25,12 +25,8 @@ impl SipHandler {
             .unwrap()
             .to_string();
 
-        if data.sn > 0 {
-            self.store.set_global_sn(data.sn);
-        }
-
         // 存储 catalog 信息，例如调用 store 中的某个方法
-        // self.store.register_catalog(&gb_code, &data);
+        self.store.save_catalog(&gb_code, data);
 
         let mut headers: rsip::Headers = Default::default();
         headers.push(request.via_header().unwrap().clone().into());
