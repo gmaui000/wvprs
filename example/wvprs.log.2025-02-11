@@ -1,0 +1,606 @@
+2025-02-11 13:43:09.512345  INFO ThreadId(01) wvprs::utils::log: src/utils/log.rs:47: start services[35m
+╔══════════════════════════════════════════════════════════╗
+║               \\ || //\\    //||===||                ║
+║                \\||//  \\  // ||___||                ║
+║                 \\//    \\//  ||                     ║
+║══════════════════════════════════════════════════════════║
+║ version: 22697e1.20250210.143346                         ║
+║                                                          ║
+║ store_engine: memory                                     ║
+║ store_url: memory://main?total=31g                       ║
+║ user_agent: wvprs                                        ║
+║ host: 0.0.0.0                                            ║
+║ my_ip: 192.168.31.164                                    ║
+║ sip_port: 5060                                           ║
+║ http_port: 6070                                          ║
+║ sip_domain: 6101130049                                   ║
+║ sip_id: 61011300490000000001                             ║
+║ sip_password: aseqw_+hiy123                              ║
+║ sip_algorithm: md5                                       ║
+║ sip_nonce: ad50a5ec1a5587f18210bbdf76d7bd84              ║
+║ sip_realm: 6101130049                                    ║
+║ socket_recv_buffer_size: 65535                           ║
+╚══════════════════════════════════════════════════════════╝[0m
+2025-02-11 13:43:09.512439  INFO ThreadId(01) wvprs::sip::server: src/sip/server.rs:24: UdpSocket::bind(0.0.0.0:5060) ok
+2025-02-11 13:43:09.512503  INFO ThreadId(01) wvprs::sip::server: src/sip/server.rs:33: TcpListener::bind(0.0.0.0:5060) ok
+2025-02-11 13:43:09.512898  INFO ThreadId(01) wvprs::http::server: src/http/server.rs:26: HttpServer::bind(0.0.0.0:6070) ok
+2025-02-11 13:43:09.512932  INFO ThreadId(01) actix_server::builder: /home/caobing/.cargo/registry/src/mirrors.ustc.edu.cn-12df342d903acd47/actix-server-2.5.0/src/builder.rs:272: starting 16 workers
+2025-02-11 13:43:09.512982  INFO ThreadId(01) actix_server::server: /home/caobing/.cargo/registry/src/mirrors.ustc.edu.cn-12df342d903acd47/actix-server-2.5.0/src/server.rs:192: Tokio runtime found; starting in existing Tokio runtime
+2025-02-11 13:43:09.513019  INFO ThreadId(01) actix_server::server: /home/caobing/.cargo/registry/src/mirrors.ustc.edu.cn-12df342d903acd47/actix-server-2.5.0/src/server.rs:197: starting service: "actix-web-service-0.0.0.0:6070", workers: 16, listening on: 0.0.0.0:6070
+2025-02-11 13:43:16.028328  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 511, request:[0m
+[33mREGISTER SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjiNeUsXjdMuRBU2j.KGSI94O1i7pQoYqc;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=2mdIf8lexOTBIMg2pPgKOBdDB3SowCcf
+To: <sip:61011300490000000001@localhost>
+Call-ID: PKcMBzp6yhIZQG-du1TsYkW1MPmX6L5V
+CSeq: 20956 REGISTER
+Contact: <sip:34020000001180000000@127.0.0.1:5070>
+Expires: 3600
+Allow: PRACK, INVITE, ACK, BYE, CANCEL, UPDATE
+Content-Length: 0
+
+2025-02-11 13:43:16.028519  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 445, response:[0m
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjiNeUsXjdMuRBU2j.KGSI94O1i7pQoYqc;alias
+From: <sip:34020000001180000000@3402000000>;tag=2mdIf8lexOTBIMg2pPgKOBdDB3SowCcf
+To: <sip:61011300490000000001@localhost>
+Call-ID: PKcMBzp6yhIZQG-du1TsYkW1MPmX6L5V
+CSeq: 20956 REGISTER
+WWW-Authenticate: Digest realm="6101130049", nonce="ad50a5ec1a5587f18210bbdf76d7bd84", algorithm=MD5, qop="auth"
+Content-Length: 0
+
+
+2025-02-11 13:43:16.028852  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 804, request:[0m
+[33mREGISTER SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=2mdIf8lexOTBIMg2pPgKOBdDB3SowCcf
+To: <sip:61011300490000000001@localhost>
+Call-ID: PKcMBzp6yhIZQG-du1TsYkW1MPmX6L5V
+CSeq: 20957 REGISTER
+Contact: <sip:34020000001180000000@127.0.0.1:5070>
+Expires: 3600
+Allow: PRACK, INVITE, ACK, BYE, CANCEL, UPDATE
+Authorization: Digest username="quxiaohui", realm="6101130049", nonce="ad50a5ec1a5587f18210bbdf76d7bd84", uri="sip:61011300490000000001@localhost:5060;transport=TCP", response="f0507108646ad63a8034de49d866275c", algorithm=MD5, cnonce="uJnNBdIDWGI3TyR.hn3zMtTNiHYmNLr3", qop=auth, nc=00000001
+Content-Length: 0
+
+2025-02-11 13:43:16.029277  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8;alias
+From: <sip:34020000001180000000@3402000000>;tag=2mdIf8lexOTBIMg2pPgKOBdDB3SowCcf
+To: <sip:61011300490000000001@localhost>
+Call-ID: PKcMBzp6yhIZQG-du1TsYkW1MPmX6L5V
+CSeq: 20957 REGISTER
+Content-Length: 0
+
+
+2025-02-11 13:43:16.029542  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 583, request:[0m
+MESSAGE sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Max-Forwards: 70
+From: <sip:61011300490000000001@6101130049>;tag=bc13af6772
+To: <sip:34020000001180000000@6101130049>
+Call-ID: DB619DF6743C4CC5BE825695014B123A@192.168.31.164:5060
+CSeq: 1 MESSAGE
+User-Agent: wvprs 22697e1.20250210.143346
+Content-Type: Application/MANSCDP+xml
+Content-Length: 131
+
+<?xml version="1.0" encoding="UTF-8"?><Query><CmdType>Catalog</CmdType><SN>1</SN><DeviceID>34020000001180000000</DeviceID></Query>
+2025-02-11 13:43:16.029718  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 586, request:[0m
+MESSAGE sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Max-Forwards: 70
+From: <sip:61011300490000000001@6101130049>;tag=34f0735b8e
+To: <sip:34020000001180000000@6101130049>
+Call-ID: 7CC8F5CE821943EFACCB55264F8227CD@192.168.31.164:5060
+CSeq: 2 MESSAGE
+User-Agent: wvprs 22697e1.20250210.143346
+Content-Type: Application/MANSCDP+xml
+Content-Length: 134
+
+<?xml version="1.0" encoding="UTF-8"?><Query><CmdType>DeviceInfo</CmdType><SN>2</SN><DeviceID>34020000001180000000</DeviceID></Query>
+2025-02-11 13:43:16.029896  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 588, request:[0m
+MESSAGE sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Max-Forwards: 70
+From: <sip:61011300490000000001@6101130049>;tag=5582b3661a
+To: <sip:34020000001180000000@6101130049>
+Call-ID: C76E8B7F81AE4018973CAF8919DF2BA4@192.168.31.164:5060
+CSeq: 3 MESSAGE
+User-Agent: wvprs 22697e1.20250210.143346
+Content-Type: Application/MANSCDP+xml
+Content-Length: 136
+
+<?xml version="1.0" encoding="UTF-8"?><Query><CmdType>DeviceStatus</CmdType><SN>3</SN><DeviceID>34020000001180000000</DeviceID></Query>
+2025-02-11 13:43:16.072360  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:190: [35mdispatch [36mrsip::Response::try_from(127.0.0.1:58443) ok, amount: 384, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Call-ID: DB619DF6743C4CC5BE825695014B123A@192.168.31.164:5060
+From: <sip:61011300490000000001@6101130049>;tag=bc13af6772
+To: <sip:34020000001180000000@6101130049>;tag=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+CSeq: 1 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.116187  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 2245, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj-86tLfCL12i1LxWFzRA4OM75-24x1K6W;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=ub3XBdE36l3AIwihvknffnUTD6prc4w8
+To: <sip:61011300490000000001@6101130049>
+Call-ID: 2Jd2vxFy16E8LV.kZZZzjBYU7tqrtimm
+CSeq: 56809 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 1808
+<Response>
+    <CmdType>Catalog</CmdType>
+    <SN>1</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <SumNum>7</SumNum>
+    <DeviceList Num="2">
+        <Item>
+            <DeviceID>34020000001320000001</DeviceID>
+            <Name>_camera98_cockpit_front</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+        <Item>
+            <DeviceID>34020000001320000002</DeviceID>
+            <Name>_camera99_cockpit_back</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+    </DeviceList>
+</Response>
+
+2025-02-11 13:43:16.130459  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj-86tLfCL12i1LxWFzRA4OM75-24x1K6W;alias
+From: <sip:34020000001180000000@3402000000>;tag=ub3XBdE36l3AIwihvknffnUTD6prc4w8
+To: <sip:61011300490000000001@6101130049>
+Call-ID: 2Jd2vxFy16E8LV.kZZZzjBYU7tqrtimm
+CSeq: 56809 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.130591  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:190: [35mdispatch [36mrsip::Response::try_from(127.0.0.1:58443) ok, amount: 384, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Call-ID: 7CC8F5CE821943EFACCB55264F8227CD@192.168.31.164:5060
+From: <sip:61011300490000000001@6101130049>;tag=34f0735b8e
+To: <sip:34020000001180000000@6101130049>;tag=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+CSeq: 2 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.130862  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 2246, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjfChAr9mfhIPRI.3xjn4w2X.ui8ap-xfG;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=-6nWGq8jqXMnja8kQEqDgWDRCGAhxn-F
+To: <sip:61011300490000000001@6101130049>
+Call-ID: jhFxqcotr2Mqtz8qYfcJY6iuuihrSbnG
+CSeq: 36156 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 1809
+<Response>
+    <CmdType>Catalog</CmdType>
+    <SN>1</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <SumNum>7</SumNum>
+    <DeviceList Num="2">
+        <Item>
+            <DeviceID>34020000001320000004</DeviceID>
+            <Name>_camera1_front_surround</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+        <Item>
+            <DeviceID>34020000001320000005</DeviceID>
+            <Name>_camera8_front_panorama</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+    </DeviceList>
+</Response>
+
+2025-02-11 13:43:16.140243  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjfChAr9mfhIPRI.3xjn4w2X.ui8ap-xfG;alias
+From: <sip:34020000001180000000@3402000000>;tag=-6nWGq8jqXMnja8kQEqDgWDRCGAhxn-F
+To: <sip:61011300490000000001@6101130049>
+Call-ID: jhFxqcotr2Mqtz8qYfcJY6iuuihrSbnG
+CSeq: 36156 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.140407  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:190: [35mdispatch [36mrsip::Response::try_from(127.0.0.1:58443) ok, amount: 384, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Call-ID: C76E8B7F81AE4018973CAF8919DF2BA4@192.168.31.164:5060
+From: <sip:61011300490000000001@6101130049>;tag=5582b3661a
+To: <sip:34020000001180000000@6101130049>;tag=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+CSeq: 3 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.140726  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 2226, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj9bX7XPCVjSVFYoevpwvBHzMdCwq.F0GL;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=3YivY02ZyolIqkLXy36VY5oePN6tDRce
+To: <sip:61011300490000000001@6101130049>
+Call-ID: o.aW5tcCz1XMzWInf7iOVNxXhCTj-F1h
+CSeq: 43105 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 1789
+<Response>
+    <CmdType>Catalog</CmdType>
+    <SN>1</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <SumNum>7</SumNum>
+    <DeviceList Num="2">
+        <Item>
+            <DeviceID>34020000001320000006</DeviceID>
+            <Name>_camera2_back</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+        <Item>
+            <DeviceID>34020000001320000007</DeviceID>
+            <Name>_camera3_left</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+    </DeviceList>
+</Response>
+
+2025-02-11 13:43:16.150288  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj9bX7XPCVjSVFYoevpwvBHzMdCwq.F0GL;alias
+From: <sip:34020000001180000000@3402000000>;tag=3YivY02ZyolIqkLXy36VY5oePN6tDRce
+To: <sip:61011300490000000001@6101130049>
+Call-ID: o.aW5tcCz1XMzWInf7iOVNxXhCTj-F1h
+CSeq: 43105 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.150515  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 1423, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj72JXn7X6Zg22KecgMJykk.kopk7Jj7af;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=TGb-QVsWTnIGUdbT5-xKSJtSWAON0.yJ
+To: <sip:61011300490000000001@6101130049>
+Call-ID: P4daLq8Ky21ENaWJaCCdAtdNAa1Fd.kK
+CSeq: 12616 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 986
+<Response>
+    <CmdType>Catalog</CmdType>
+    <SN>1</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <SumNum>7</SumNum>
+    <DeviceList Num="1">
+        <Item>
+            <DeviceID>34020000001320000008</DeviceID>
+            <Name>_camera4_right</Name>
+            <Manufacturer>manufacturer</Manufacturer>
+            <Model>model</Model>
+            <Owner>owner</Owner>
+            <CivilCode>civilcode</CivilCode>
+            <Block>block</Block>
+            <Address>address</Address>
+            <Parental>0</Parental>
+            <ParentID>34020000001180000000</ParentID>
+            <RegisterWay>1</RegisterWay>
+            <Secrecy>0</Secrecy>
+            <IPAddress>127.0.0.1</IPAddress>
+            <Port>8000</Port>
+            <Password>password</Password>
+            <Status>ON</Status>
+            <Longitude>114.888694</Longitude>
+            <Latitude>27.819870999999999</Latitude>
+            <PTZType>1</PTZType>
+        </Item>
+    </DeviceList>
+</Response>
+
+2025-02-11 13:43:16.159761  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj72JXn7X6Zg22KecgMJykk.kopk7Jj7af;alias
+From: <sip:34020000001180000000@3402000000>;tag=TGb-QVsWTnIGUdbT5-xKSJtSWAON0.yJ
+To: <sip:61011300490000000001@6101130049>
+Call-ID: P4daLq8Ky21ENaWJaCCdAtdNAa1Fd.kK
+CSeq: 12616 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:16.159966  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 748, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPj9DqTjHCdqlW.fIQ6rHRSuD29Ik80dLOw;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=YsEYn5HD5Z-LfQWAUY4Di-g2523akTu8
+To: <sip:61011300490000000001@6101130049>
+Call-ID: AMuiXECYMSQpY1m9tKwlnsN6n6UfDa..
+CSeq: 28830 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 311
+<Response>
+    <CmdType>DeviceInfo</CmdType>
+    <SN>2</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <DeviceName>C1-00000</DeviceName>
+    <Result>OK</Result>
+    <Manufacturer>manufacturer</Manufacturer>
+    <Model>model</Model>
+    <Firmware>firmware</Firmware>
+    <Channel>10</Channel>
+</Response>
+
+2025-02-11 13:43:16.169358  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 757, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjVNFtAWxKLk0dir84j1xK.COqMZuwxi7S;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=Sp4bYtgGU-LfBOmuMckvd5Qp8gwR7fW6
+To: <sip:61011300490000000001@6101130049>
+Call-ID: F3qaj1sXYCzGS11bm4T3H1SlynUoIG1.
+CSeq: 12413 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 320
+<Response>
+    <CmdType>DeviceStatus</CmdType>
+    <SN>3</SN>
+    <DeviceID>34020000001180000000</DeviceID>
+    <Result>OK</Result>
+    <Online>ONLINE</Online>
+    <Status>OK</Status>
+    <Encode>ON</Encode>
+    <Record>ON</Record>
+    <DeviceTime>2025-02-11T13:43:16</DeviceTime>
+    <Alarmstatus Num="0"/>
+</Response>
+
+2025-02-11 13:43:16.178693  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjVNFtAWxKLk0dir84j1xK.COqMZuwxi7S;alias
+From: <sip:34020000001180000000@3402000000>;tag=Sp4bYtgGU-LfBOmuMckvd5Qp8gwR7fW6
+To: <sip:61011300490000000001@6101130049>
+Call-ID: F3qaj1sXYCzGS11bm4T3H1SlynUoIG1.
+CSeq: 12413 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:25.988108  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 573, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjzJFqKsKJcI-9W28Dy5ljAAhErpk15Zhz;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=PtKqxhkZnvVKI2LUEWoZVFjFaqo.cOzf
+To: <sip:61011300490000000001@6101130049>
+Call-ID: pEZqhe9Tuwi9xHPElp.KXaedBjfJZqRH
+CSeq: 6708 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 137
+<Notify>
+    <CmdType>Keepalive</CmdType>
+    <SN>0</SN>
+    <DeviceID>61011300490000000001</DeviceID>
+    <Status>OK</Status>
+</Notify>
+
+2025-02-11 13:43:26.002133  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 320, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjzJFqKsKJcI-9W28Dy5ljAAhErpk15Zhz;alias
+From: <sip:34020000001180000000@3402000000>;tag=PtKqxhkZnvVKI2LUEWoZVFjFaqo.cOzf
+To: <sip:61011300490000000001@6101130049>
+Call-ID: pEZqhe9Tuwi9xHPElp.KXaedBjfJZqRH
+CSeq: 6708 MESSAGE
+Content-Length: 0
+
+
+2025-02-11 13:43:28.311993  INFO ThreadId(36) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 922, request:[0m
+INVITE sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Max-Forwards: 70
+From: <sip:61011300490000000001@6101130049>;tag=7e172e8291
+To: <sip:34020000001180000000@6101130049>
+Contact: <sip:61011300490000000001@192.168.31.164:5060>
+Call-ID: 339075F17BD04988BB232644EC094E27@192.168.31.164:5060
+CSeq: 6709 INVITE
+Allow: INVITE, ACK, BYE, CANCEL, UPDATE, PRACK
+Supported: 100rel
+Subject: 34020000001320000001:0
+User-Agent: wvprs 22697e1.20250210.143346
+Content-Type: APPLICATION/SDP
+Content-Length: 320
+
+v=0
+o=34020000001180000000 0 0 IN IP4 192.168.31.164
+s=Play
+c=IN IP4 192.168.31.164
+t=0 0
+m=video 10001 TCP/RTP/AVP 96 97 98 99
+c=IN IP4 192.168.31.164
+a=rtpmap:96 PS/90000
+a=rtpmap:97 MPEG4/90000
+a=rtpmap:98 H264/90000
+a=rtpmap:99 H265/90000
+a=recvonly
+a=streamMode:MAIN
+a=setup:passive
+a=connection:new
+
+2025-02-11 13:43:28.312523  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:190: [35mdispatch [36mrsip::Response::try_from(127.0.0.1:58443) ok, amount: 344, response:[0m
+SIP/2.0 100 Trying
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Call-ID: 339075F17BD04988BB232644EC094E27@192.168.31.164:5060
+From: <sip:61011300490000000001@6101130049>;tag=7e172e8291
+To: <sip:34020000001180000000@6101130049>
+CSeq: 6709 INVITE
+Content-Length: 0
+
+
+2025-02-11 13:43:28.359635  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:190: [35mdispatch [36mrsip::Response::try_from(127.0.0.1:58443) ok, amount: 699, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Call-ID: 339075F17BD04988BB232644EC094E27@192.168.31.164:5060
+From: <sip:61011300490000000001@6101130049>;tag=7e172e8291
+To: <sip:34020000001180000000@6101130049>;tag=rqhM6fo5L-djQy.cqDHziHhAFqKxmqWX
+CSeq: 6709 INVITE
+Contact: <sip:34020000001180000000@127.0.0.1:5070>
+Allow: INVITE, ACK, BYE, CANCEL, UPDATE
+Supported: 
+Content-Type: application/sdp
+Content-Length: 182
+
+v=0
+o=34020000001320000001 0 1 IN IP4 127.0.0.1
+s=Play
+c=IN IP4 127.0.0.1
+t=0 0
+m=video 8000 TCP/RTP/AVP 96
+a=setup:active
+a=connection:new
+a=rtpmap:96 PS/90000
+a=sendonly
+
+2025-02-11 13:43:28.359917  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 409, request:[0m
+ACK sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport=5060;received=127.0.0.1;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+From: <sip:61011300490000000001@6101130049>;tag=7e172e8291
+To: <sip:34020000001180000000@6101130049>;tag=rqhM6fo5L-djQy.cqDHziHhAFqKxmqWX
+Call-ID: 339075F17BD04988BB232644EC094E27@192.168.31.164:5060
+CSeq: 6709 INVITE
+Content-Length: 0
+
+
+2025-02-11 13:44:24.349342  INFO ThreadId(37) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 444, request:[0m
+BYE sip:34020000001180000000@6101130049 SIP/2.0
+Via: SIP/2.0/TCP 192.168.31.164:5060;rport;branch=z9hG4bKPjJ9bm5TyUGMJuhp3nPiJRk4MOfpmVQZR8
+Max-Forwards: 70
+From: <sip:61011300490000000001@6101130049>;tag=ecb3fec62f
+To: <sip:34020000001180000000@6101130049>
+Contact: <sip:61011300490000000001@192.168.31.164:5060>
+Call-ID: 339075F17BD04988BB232644EC094E27@192.168.31.164:5060
+CSeq: 6710 BYE
+User-Agent: wvprs 22697e1.20250210.143346
+
+
+2025-02-11 13:44:25.989825  INFO ThreadId(02) wvprs::sip::handler: src/sip/handler/mod.rs:102: [35mdispatch [36mrsip::Request::try_from(127.0.0.1:58443) ok, amount: 574, request:[0m
+[33mMESSAGE SIP/2.0 sip:61011300490000000001@localhost:5060;transport=TCP[0m
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjFB3g9TkDZasr2VLGcsWBPV6d8a8Jtr8q;alias
+Max-Forwards: 70
+From: <sip:34020000001180000000@3402000000>;tag=tr0rVLkWUMP0YGOr49IbjWOqEPtJw.Vg
+To: <sip:61011300490000000001@6101130049>
+Call-ID: fdDZUetZS98OmrNItzJGnMGCkaY5CQZv
+CSeq: 65330 MESSAGE
+Content-Type: Application/MANSCDP+xml
+Content-Length: 137
+<Notify>
+    <CmdType>Keepalive</CmdType>
+    <SN>1</SN>
+    <DeviceID>61011300490000000001</DeviceID>
+    <Status>OK</Status>
+</Notify>
+
+2025-02-11 13:44:26.003735  INFO ThreadId(02) wvprs::sip::utils::sock: src/sip/utils/sock.rs:140: [32msocket_send [36mTcpStream::send_to(127.0.0.1:58443) ok, amount: 321, response:[0m
+SIP/2.0 200 OK
+Via: SIP/2.0/TCP 127.0.0.1:58443;rport;branch=z9hG4bKPjFB3g9TkDZasr2VLGcsWBPV6d8a8Jtr8q;alias
+From: <sip:34020000001180000000@3402000000>;tag=tr0rVLkWUMP0YGOr49IbjWOqEPtJw.Vg
+To: <sip:61011300490000000001@6101130049>
+Call-ID: fdDZUetZS98OmrNItzJGnMGCkaY5CQZv
+CSeq: 65330 MESSAGE
+Content-Length: 0
+
+
