@@ -7,3 +7,11 @@ caobing@caobing-R9000K:~$ curl -X POST "http://localhost:6070/live/play" -H "Con
 # live/stop
 curl -X POST "http://localhost:6070/live/stop" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001180000000", "stream_id": 1}'
 {"locate":"src/http/handler/live/stop.rs#L65","code":0,"msg":"OK","gb_code":"34020000001180000000","stream_id":1}
+
+# replay/start
+curl -X POST "http://localhost:6070/replay/start" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001180000000", "setup_type": "passive","channel_id": "34020000001320000004", "start_ts": 1739328848, "stop_ts": 1739328916 }'
+curl -X POST "http://localhost:6070/replay/start" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001320000001", "setup_type": "passive","channel_id": "34020000001320000001", "start_ts": 1739418000, "stop_ts": 1739418600 }'
+
+# replay/stop
+curl -X POST "http://localhost:6070/replay/stop" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001180000000", "stream_id":1}'
+curl -X POST "http://localhost:6070/replay/stop" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001320000001", "stream_id":1}'

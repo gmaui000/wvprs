@@ -50,6 +50,7 @@ impl SipHandler {
             ))
             .into(),
         );
+        headers.push(rsip::Header::ContentLength(Default::default()));
 
         // request
         let request = rsip::Request {
