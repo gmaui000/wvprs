@@ -42,7 +42,7 @@ pub struct Device {
     #[serde(rename = "CivilCode")]
     pub civil_code: String,
     #[serde(rename = "Block")]
-    pub block: String,
+    pub block: Option<String>,
     #[serde(rename = "Address")]
     pub address: String,
     #[serde(rename = "Parental")]
@@ -54,19 +54,19 @@ pub struct Device {
     #[serde(rename = "Secrecy")]
     pub secrecy: u32,
     #[serde(rename = "IPAddress")]
-    pub ip_address: String,
+    pub ip_address: Option<String>,
     #[serde(rename = "Port")]
-    pub port: u16,
+    pub port: Option<u16>,
     #[serde(rename = "Password")]
-    pub password: String,
+    pub password: Option<String>,
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: Option<String>,
     #[serde(rename = "Longitude")]
-    pub longitude: f64,
+    pub longitude: Option<f64>,
     #[serde(rename = "Latitude")]
-    pub latitude: f64,
+    pub latitude: Option<f64>,
     #[serde(rename = "PTZType")]
-    pub ptz_type: u32,
+    pub ptz_type: Option<u32>,
 }
 
 impl Catalog {

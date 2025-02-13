@@ -1,3 +1,4 @@
+use rand::Rng;
 use std::fmt;
 use std::str::FromStr;
 
@@ -155,5 +156,23 @@ pub fn generate_media_sdp(
         key: None,
     };
 
-    session_desc.to_string()
+    match session_type {
+        SdpSessionType::Play => {
+            // play ssrc 0+gbcore[4:8]+random[4]
+            let mut rng = rand::thread_rng();
+            let gbcore_part = &device_gb_code[4..8];
+            let random_part = rng.gen_range(0..10000);
+            let ssrc = format!("0{}{:04}", gbcore_part, random_part);
+            format!("{}y={}\r\n", session_desc, ssrc)
+        }
+        SdpSessionType::Playback => {
+            // play ssrc 1+gbcore[4:8]+random[4]
+            let mut rng = rand::thread_rng();
+            let gbcore_part = &device_gb_code[4..8];
+            let random_part = rng.gen_range(0..10000);
+            let ssrc = format!("1{}{:04}", gbcore_part, random_part);
+            format!("{}y={}\r\n", session_desc, ssrc)
+        }
+        _ => session_desc.to_string(),
+    }
 }

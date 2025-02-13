@@ -7,7 +7,7 @@ use tokio::sync::Mutex;
 use uuid::Uuid;
 
 use super::StoreEngine;
-use super::{GbStreamInfo, SipDeviceInfo, SipSubDeviceInfo};
+use super::{GbStreamInfo, SipDeviceInfo};
 use crate::sip::message::Catalog;
 
 use crate::utils::config::Config;
@@ -191,28 +191,7 @@ impl StoreEngine for MemoryStore {
             }
             if let Some(sub_devices) = &mut device_info.sub_devices {
                 for device in data.device_list.items {
-                    let sub_device_info = SipSubDeviceInfo {
-                        sub_device_id: device.device_id,
-                        name: device.name,
-                        manufacturer: device.manufacturer,
-                        model: device.model,
-                        owner: device.owner,
-                        civil_code: device.civil_code,
-                        block: device.block,
-                        address: device.address,
-                        parental: device.parental,
-                        parent_id: device.parent_id,
-                        register_way: device.register_way,
-                        secrecy: device.secrecy,
-                        ip_address: device.ip_address,
-                        port: device.port,
-                        password: device.password,
-                        status: device.status,
-                        longitude: device.longitude,
-                        latitude: device.latitude,
-                        ptz_type: device.ptz_type,
-                    };
-                    sub_devices.push(sub_device_info);
+                    sub_devices.push(device);
                 }
                 return true;
             }
@@ -225,6 +204,7 @@ impl StoreEngine for MemoryStore {
         gb_code: &str,
         channel_id: &str,
         caller_id: &str,
+        from_tag: &str,
         is_live: bool,
     ) -> Option<super::InviteResult> {
         let result = self.find_device_by_gb_code(gb_code);
@@ -253,6 +233,8 @@ impl StoreEngine for MemoryStore {
             GbStreamInfo {
                 gb_code: gb_code.to_string(),
                 caller_id: caller_id.to_string(),
+                from_tag: from_tag.to_string(),
+                to_tag: String::new(),
                 stream_server_ip: String::new(),
                 stream_server_port: 0,
                 ts,
@@ -278,31 +260,46 @@ impl StoreEngine for MemoryStore {
         })
     }
 
+    fn update_stream_tag_info(&self, from_tag: &str, to_tag: &str) {
+        for mut entry in self.gb_streams.iter_mut() {
+            let stream = entry.value_mut();
+            if from_tag == stream.from_tag {
+                stream.to_tag = to_tag.to_string();
+            }
+        }
+    }
+
     fn update_stream_server_info(
         &self,
         stream_id: u32,
-        stream_server_ip: String,
+        stream_server_ip: &str,
         stream_server_port: u16,
     ) {
         let entry = self.gb_streams.entry(stream_id);
         if let dashmap::Entry::Occupied(mut stream) = entry {
-            stream.get_mut().stream_server_ip = stream_server_ip;
+            stream.get_mut().stream_server_ip = stream_server_ip.to_string();
             stream.get_mut().stream_server_port = stream_server_port;
         }
     }
 
     fn bye(&self, gb_code: &str, stream_id: u32) -> Option<super::ByeResult> {
         let call_id: String;
+        let from_tag: String;
+        let to_tag: String;
         let ip: String;
         let port: u16;
         if let Some(stream) = self.gb_streams.get(&stream_id) {
             let GbStreamInfo {
                 caller_id,
+                from_tag: from_tag_inner,
+                to_tag: to_tag_inner,
                 stream_server_ip,
                 stream_server_port,
                 ..
             } = stream.value();
             call_id = caller_id.clone();
+            from_tag = from_tag_inner.clone();
+            to_tag = to_tag_inner.clone();
             ip = stream_server_ip.clone();
             port = *stream_server_port;
         } else {
@@ -329,6 +326,8 @@ impl StoreEngine for MemoryStore {
             return Some(super::ByeResult {
                 success: bye_to_device,
                 call_id,
+                from_tag,
+                to_tag,
                 branch,
                 socket_addr,
                 tcp_stream,

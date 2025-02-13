@@ -15,6 +15,8 @@ async fn post_stop(
     if let Some(ByeResult {
         success,
         call_id,
+        from_tag,
+        to_tag,
         branch,
         socket_addr,
         tcp_stream,
@@ -24,7 +26,15 @@ async fn post_stop(
     {
         if success {
             sip_handler
-                .send_bye(socket_addr, tcp_stream, &branch, &call_id, &data.gb_code)
+                .send_bye(
+                    socket_addr,
+                    tcp_stream,
+                    &branch,
+                    &call_id,
+                    &from_tag,
+                    &to_tag,
+                    &data.gb_code,
+                )
                 .await;
         }
 

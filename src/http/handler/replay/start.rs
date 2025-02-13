@@ -16,9 +16,10 @@ async fn post_start(
 
     let mut id = 0;
     let call_id = sip_handler.caller_id_str();
+    let from_tag = sip_handler.tag_new(32);
     match sip_handler
         .store
-        .invite(&data.gb_code, &data.channel_id, &call_id, true)
+        .invite(&data.gb_code, &data.channel_id, &call_id, &from_tag, true)
     {
         None => (code, msg) = (404, "ipc device not found"),
         Some(InviteResult {
@@ -59,7 +60,7 @@ async fn post_start(
                             {
                                 sip_handler.store.update_stream_server_info(
                                     stream_id,
-                                    resp.media_server_ip.clone(),
+                                    &resp.media_server_ip,
                                     resp.media_server_port as u16,
                                 );
 
@@ -73,6 +74,7 @@ async fn post_start(
                                         branch,
                                         channel_id,
                                         caller_id: call_id,
+                                        from_tag,
                                         media_server_ip: String::from("127.0.0.1"),
                                         media_server_port: 7080,
                                         session_type: sip::message::sdp::SdpSessionType::Playback,

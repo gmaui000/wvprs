@@ -13,6 +13,7 @@ pub mod register;
 pub mod subscribe;
 pub mod update;
 
+use bytes::Bytes;
 use std::net::SocketAddr;
 use std::str::FromStr;
 
@@ -69,15 +70,21 @@ impl SipHandler {
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
         sip_data: &[u8],
     ) {
-        if sip_data.len() == DOUBLE_CR_LF_BYTES.len() && sip_data == DOUBLE_CR_LF_BYTES {
+        // 将 sip_data 转换为 Bytes 类型并修剪前面的空格和制表符
+        let bytes = Bytes::copy_from_slice(sip_data);
+        let trimmed_sip_data = bytes.trim_ascii_start();
+
+        if trimmed_sip_data.len() == DOUBLE_CR_LF_BYTES.len() && sip_data == DOUBLE_CR_LF_BYTES {
             return;
         }
 
-        if sip_data.len() > SIP_BYTES.len() && sip_data[..SIP_BYTES.len()] == SIP_BYTES {
-            self.dispatch_response(device_addr, tcp_stream, sip_data)
+        if trimmed_sip_data.len() > SIP_BYTES.len()
+            && trimmed_sip_data[..SIP_BYTES.len()] == SIP_BYTES
+        {
+            self.dispatch_response(device_addr, tcp_stream, trimmed_sip_data)
                 .await;
         } else {
-            self.dispatch_request(device_addr, tcp_stream, sip_data)
+            self.dispatch_request(device_addr, tcp_stream, trimmed_sip_data)
                 .await;
         }
     }

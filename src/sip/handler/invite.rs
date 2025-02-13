@@ -62,11 +62,37 @@ impl SipHandler {
                     .find_gb_code_by_caller_id(response.call_id_header().unwrap().clone().value())
                 {
                     let mut headers: rsip::Headers = Default::default();
+                    let mut respones_clone = response.clone();
+                    let from_tag = response
+                        .from_header()
+                        .unwrap()
+                        .clone()
+                        .tag()
+                        .unwrap()
+                        .unwrap()
+                        .to_string();
+                    let to_tag = response
+                        .to_header()
+                        .unwrap()
+                        .clone()
+                        .tag()
+                        .unwrap()
+                        .unwrap()
+                        .to_string();
+                    self.store.update_stream_tag_info(&from_tag, &to_tag);
                     headers.push(response.via_header().unwrap().clone().into());
                     headers.push(response.from_header().unwrap().clone().into());
                     headers.push(self.to_old(response.to_header().unwrap()).into());
                     headers.push(response.call_id_header().unwrap().clone().into());
-                    headers.push(response.cseq_header().unwrap().clone().into());
+                    headers.push(
+                        respones_clone
+                            .cseq_header_mut()
+                            .unwrap()
+                            .mut_method(rsip::Method::Ack)
+                            .unwrap()
+                            .clone()
+                            .into(),
+                    );
                     headers.push(rsip::Header::ContentLength(Default::default()));
 
                     let request = rsip::Request {

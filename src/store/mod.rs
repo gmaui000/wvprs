@@ -3,7 +3,7 @@ pub mod mysql;
 pub mod not_impl;
 pub mod redis;
 
-use crate::sip::message::Catalog;
+use crate::sip::message::{Catalog, Device};
 use crate::utils::config::Config;
 use std::net::SocketAddr;
 use std::sync::mpsc;
@@ -23,31 +23,7 @@ pub struct SipDeviceInfo {
     // 时间戳
     pub ts: u32,
     // 子设备
-    pub sub_devices: Option<Vec<SipSubDeviceInfo>>,
-}
-
-// 定义存储在 sip_devices 中的设备信息结构体
-#[derive(Debug)]
-pub struct SipSubDeviceInfo {
-    pub sub_device_id: String,
-    pub name: String,
-    pub manufacturer: String,
-    pub model: String,
-    pub owner: String,
-    pub civil_code: String,
-    pub block: String,
-    pub address: String,
-    pub parental: u32,
-    pub parent_id: String,
-    pub register_way: u32,
-    pub secrecy: u32,
-    pub ip_address: String,
-    pub port: u16,
-    pub password: String,
-    pub status: String,
-    pub longitude: f64,
-    pub latitude: f64,
-    pub ptz_type: u32,
+    pub sub_devices: Option<Vec<Device>>,
 }
 
 // 定义存储在 gb_streams 中的流信息结构体
@@ -58,6 +34,10 @@ pub struct GbStreamInfo {
     pub gb_code: String,
     // 调用者 ID
     pub caller_id: String,
+    // 发起方tag
+    pub from_tag: String,
+    // 接收方tag
+    pub to_tag: String,
     // 流媒体 IP
     pub stream_server_ip: String,
     // 流媒体 PORT
@@ -71,13 +51,6 @@ pub struct DeviceInfo {
     pub branch: String,
     pub socket_addr: SocketAddr,
     pub tcp_stream: Option<Arc<Mutex<OwnedWriteHalf>>>,
-}
-
-// 用于表示流信息的结构体
-pub struct StreamInfo {
-    pub gb_code: String,
-    pub stream_server_ip: String,
-    pub stream_server_port: u16,
 }
 
 // 用于表示 invite 操作的返回结果的结构体
@@ -94,6 +67,8 @@ pub struct InviteResult {
 pub struct ByeResult {
     pub success: bool,
     pub call_id: String,
+    pub from_tag: String,
+    pub to_tag: String,
     pub branch: String,
     pub socket_addr: SocketAddr,
     pub tcp_stream: Option<Arc<Mutex<OwnedWriteHalf>>>,
@@ -167,15 +142,18 @@ pub trait StoreEngine: Send + Sync {
         _gb_code: &str,
         _channel_id: &str,
         _caller_id: &str,
+        _from_tag: &str,
         _is_live: bool,
     ) -> Option<InviteResult> {
         None
     }
 
+    fn update_stream_tag_info(&self, _from_tag: &str, _to_tag: &str) {}
+
     fn update_stream_server_info(
         &self,
         _stream_id: u32,
-        _stream_server_ip: String,
+        _stream_server_ip: &str,
         _stream_server_port: u16,
     ) {
     }

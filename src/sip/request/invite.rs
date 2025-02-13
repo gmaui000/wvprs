@@ -13,6 +13,7 @@ pub struct SendInviteParams {
     pub branch: String,
     pub channel_id: String,
     pub caller_id: String,
+    pub from_tag: String,
     pub media_server_ip: String,
     pub media_server_port: u16,
     pub session_type: sip::message::SdpSessionType,
@@ -31,6 +32,7 @@ impl SipHandler {
             branch,
             channel_id,
             caller_id,
+            from_tag,
             media_server_ip,
             media_server_port,
             session_type,
@@ -50,6 +52,7 @@ impl SipHandler {
             start_ts,
             stop_ts,
         );
+
         let bin_body = str_body.as_bytes().to_vec();
 
         // headers
@@ -57,6 +60,7 @@ impl SipHandler {
             &branch,
             &channel_id,
             &caller_id,
+            &from_tag,
             &gb_code,
             tcp_stream.as_ref(),
             &str_body,
@@ -74,6 +78,7 @@ impl SipHandler {
         branch: &str,
         channel_id: &str,
         caller_id: &str,
+        from_tag: &str,
         gb_code: &str,
         tcp_stream: Option<&Arc<Mutex<OwnedWriteHalf>>>,
         str_body: &str,
@@ -91,7 +96,7 @@ impl SipHandler {
             .into(),
         );
         headers.push(rsip::headers::MaxForwards::default().into());
-        headers.push(self.from_new().into());
+        headers.push(self.from_old(from_tag).into());
         headers.push(self.to_new(&gb_code.to_string()).into());
         headers.push(
             rsip::headers::Contact::new(format!("<sip:{}@{}:{}>", self.id, self.ip, self.port))
