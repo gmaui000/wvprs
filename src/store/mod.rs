@@ -66,7 +66,7 @@ pub struct InviteResult {
 // 用于表示 bye 操作的返回结果的结构体
 pub struct ByeResult {
     pub success: bool,
-    pub call_id: String,
+    pub caller_id: String,
     pub from_tag: String,
     pub to_tag: String,
     pub branch: String,

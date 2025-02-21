@@ -3,7 +3,7 @@ use actix_web::{post, web, Responder};
 use crate::gss;
 use crate::{
     http::message::replay::stop::{ReplayStopRequest, ReplayStopResponse},
-    sip::handler::SipHandler,
+    sip::handler::{SipHandler, SipTransaction},
     store::ByeResult,
 };
 
@@ -14,7 +14,7 @@ async fn post_stop(
 ) -> impl Responder {
     if let Some(ByeResult {
         success,
-        call_id,
+        caller_id,
         from_tag,
         to_tag,
         branch,
@@ -29,10 +29,12 @@ async fn post_stop(
                 .send_bye(
                     socket_addr,
                     tcp_stream,
-                    &branch,
-                    &call_id,
-                    &from_tag,
-                    &to_tag,
+                    SipTransaction {
+                        caller_id,
+                        from_tag,
+                        to_tag,
+                        branch,
+                    },
                     &data.gb_code,
                 )
                 .await;

@@ -1,6 +1,6 @@
 use rsip::{self, prelude::UntypedHeader};
 
-use crate::sip::handler::SipHandler;
+use crate::sip::handler::{SipHandler, SipTransaction};
 use crate::version;
 
 impl SipHandler {
@@ -8,10 +8,7 @@ impl SipHandler {
         &self,
         device_addr: std::net::SocketAddr,
         tcp_stream: Option<std::sync::Arc<tokio::sync::Mutex<tokio::net::tcp::OwnedWriteHalf>>>,
-        branch: &String,
-        caller_id: &String,
-        from_tag: &str,
-        to_tag: &str,
+        transaction: SipTransaction,
         gb_code: &String,
     ) -> bool {
         // headers
@@ -23,18 +20,18 @@ impl SipHandler {
                 } else {
                     rsip::Transport::Udp
                 },
-                branch,
+                &transaction.branch,
             )
             .into(),
         );
         headers.push(rsip::headers::MaxForwards::default().into());
-        headers.push(self.from_old(from_tag).into());
-        headers.push(self.to_new_with_tag(gb_code, to_tag).into());
+        headers.push(self.from_old(&transaction.from_tag).into());
+        headers.push(self.to_new_with_tag(gb_code, &transaction.to_tag).into());
         headers.push(
             rsip::headers::Contact::new(format!("<sip:{}@{}:{}>", self.id, self.ip, self.port))
                 .into(),
         );
-        headers.push(self.caller_id_from_str(caller_id).into());
+        headers.push(self.caller_id_from_str(&transaction.caller_id).into());
         headers.push(
             rsip::typed::CSeq {
                 seq: self.store.add_fetch_global_sequence(),

@@ -25,6 +25,12 @@ use rsip::{
 use super::server::{DOUBLE_CR_LF_BYTES, SIP_BYTES};
 use crate::store::StoreEngine;
 use crate::utils::{color, config::Config};
+pub struct SipTransaction {
+    pub caller_id: String,
+    pub from_tag: String,
+    pub to_tag: String,
+    pub branch: String,
+}
 
 pub struct SipHandler {
     pub ip: String,

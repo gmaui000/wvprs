@@ -283,21 +283,21 @@ impl StoreEngine for MemoryStore {
     }
 
     fn bye(&self, gb_code: &str, stream_id: u32) -> Option<super::ByeResult> {
-        let call_id: String;
+        let caller_id: String;
         let from_tag: String;
         let to_tag: String;
         let ip: String;
         let port: u16;
         if let Some(stream) = self.gb_streams.get(&stream_id) {
             let GbStreamInfo {
-                caller_id,
+                caller_id: caller_id_inner,
                 from_tag: from_tag_inner,
                 to_tag: to_tag_inner,
                 stream_server_ip,
                 stream_server_port,
                 ..
             } = stream.value();
-            call_id = caller_id.clone();
+            caller_id = caller_id_inner.clone();
             from_tag = from_tag_inner.clone();
             to_tag = to_tag_inner.clone();
             ip = stream_server_ip.clone();
@@ -325,7 +325,7 @@ impl StoreEngine for MemoryStore {
         {
             return Some(super::ByeResult {
                 success: bye_to_device,
-                call_id,
+                caller_id,
                 from_tag,
                 to_tag,
                 branch,

@@ -1,4 +1,4 @@
-use crate::sip::handler::SipHandler;
+use crate::sip::handler::{SipHandler, SipTransaction};
 use crate::{sip, version};
 use rsip::{self, prelude::UntypedHeader};
 use std::net::SocketAddr;
@@ -57,10 +57,13 @@ impl SipHandler {
 
         // headers
         let headers = self.build_headers(
-            &branch,
+            SipTransaction {
+                caller_id,
+                from_tag,
+                to_tag: String::new(),
+                branch,
+            },
             &channel_id,
-            &caller_id,
-            &from_tag,
             &gb_code,
             tcp_stream.as_ref(),
             &str_body,
@@ -75,10 +78,8 @@ impl SipHandler {
 
     fn build_headers(
         &self,
-        branch: &str,
+        transaction: SipTransaction,
         channel_id: &str,
-        caller_id: &str,
-        from_tag: &str,
         gb_code: &str,
         tcp_stream: Option<&Arc<Mutex<OwnedWriteHalf>>>,
         str_body: &str,
@@ -91,18 +92,18 @@ impl SipHandler {
                 } else {
                     rsip::Transport::Udp
                 },
-                &branch.to_string(),
+                &transaction.branch,
             )
             .into(),
         );
         headers.push(rsip::headers::MaxForwards::default().into());
-        headers.push(self.from_old(from_tag).into());
+        headers.push(self.from_old(&transaction.from_tag).into());
         headers.push(self.to_new(&gb_code.to_string()).into());
         headers.push(
             rsip::headers::Contact::new(format!("<sip:{}@{}:{}>", self.id, self.ip, self.port))
                 .into(),
         );
-        headers.push(self.caller_id_from_str(&caller_id.to_string()).into());
+        headers.push(self.caller_id_from_str(&transaction.caller_id).into());
         headers.push(
             rsip::typed::CSeq {
                 seq: self.store.add_fetch_global_sequence(),
