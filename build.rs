@@ -6,13 +6,6 @@ use std::process::Command;
 
 fn main() -> io::Result<()> {
     replace_version_in_rs()?;
-
-    println!("cargo:rerun-if-changed=src/proto/gss.proto");
-    tonic_build::configure()
-        .type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]")
-        .compile_well_known_types(true)
-        .compile_protos(&["src/proto/gss.proto"], &["proto"])
-        .unwrap();
     Ok(())
 }
 
