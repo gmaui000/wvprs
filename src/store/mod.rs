@@ -72,8 +72,6 @@ pub struct ByeResult {
     pub branch: String,
     pub socket_addr: SocketAddr,
     pub tcp_stream: Option<Arc<Mutex<OwnedWriteHalf>>>,
-    pub stream_server_ip: String,
-    pub stream_server_port: u16,
 }
 
 pub trait StoreEngine: Send + Sync {

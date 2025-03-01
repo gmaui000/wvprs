@@ -15,3 +15,6 @@ curl -X POST "http://localhost:6070/replay/start" -H "Content-Type: application/
 # replay/stop
 curl -X POST "http://localhost:6070/replay/stop" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001180000000", "stream_id":1}'
 curl -X POST "http://localhost:6070/replay/stop" -H "Content-Type: application/json" -d '{ "gb_code": "34020000001320000001", "stream_id":1}'
+
+# ffplay play
+ffplay -i rtsp://localhost:8554/rtp/000015C9?token_id=cowa_test

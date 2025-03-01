@@ -286,22 +286,16 @@ impl StoreEngine for MemoryStore {
         let caller_id: String;
         let from_tag: String;
         let to_tag: String;
-        let ip: String;
-        let port: u16;
         if let Some(stream) = self.gb_streams.get(&stream_id) {
             let GbStreamInfo {
                 caller_id: caller_id_inner,
                 from_tag: from_tag_inner,
                 to_tag: to_tag_inner,
-                stream_server_ip,
-                stream_server_port,
                 ..
             } = stream.value();
             caller_id = caller_id_inner.clone();
             from_tag = from_tag_inner.clone();
             to_tag = to_tag_inner.clone();
-            ip = stream_server_ip.clone();
-            port = *stream_server_port;
         } else {
             return None;
         }
@@ -331,8 +325,6 @@ impl StoreEngine for MemoryStore {
                 branch,
                 socket_addr,
                 tcp_stream,
-                stream_server_ip: ip,
-                stream_server_port: port,
             });
         }
 

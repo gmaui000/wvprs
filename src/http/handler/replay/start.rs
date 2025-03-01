@@ -1,6 +1,5 @@
 use actix_web::{post, web, Responder};
 
-use crate::gss;
 use crate::{
     http::message::replay::start::{ReplayStartRequest, ReplayStartResponse},
     sip::{self, handler::SipHandler},
@@ -21,7 +20,7 @@ async fn post_start(
         .store
         .invite(&data.gb_code, &data.channel_id, &call_id, &from_tag, true)
     {
-        None => (code, msg) = (404, "ipc device not found"),
+        None => (code, msg) = (404, "device not found"),
         Some(InviteResult {
             success,
             stream_id,
@@ -30,65 +29,33 @@ async fn post_start(
             socket_addr,
             tcp_stream,
         }) => {
+            let server_ip = "192.168.31.164";
+            let server_port = 10000;
             id = stream_id;
+            sip_handler
+                .store
+                .update_stream_server_info(stream_id, server_ip, server_port);
 
-            match tonic::transport::Channel::builder("tcp://127.0.0.1:7080".parse().unwrap())
-                .connect()
-                .await
-            {
-                Err(e) => {
-                    tracing::error!("grpc connect error, e: {:?}", e);
-                }
-                Ok(channel) => {
-                    let mut client =
-                        gss::gbt_stream_service_client::GbtStreamServiceClient::new(channel);
-
-                    let req = gss::BindStreamPortRequest {
-                        gb_code: data.gb_code.clone(),
-                        stream_id,
-                        setup_type: gss::StreamSetupType::from_str_name(&data.setup_type)
-                            .unwrap_or(gss::StreamSetupType::Udp)
-                            as i32,
-                    };
-                    match client.bind_stream_port(req).await {
-                        Err(e) => {
-                            tracing::error!("grpc bind_stream_port error, e: {:?}", e);
-                        }
-                        Ok(response) => {
-                            let resp = response.into_inner();
-                            if resp.code == gss::ResponseCode::Ok as i32 && resp.message.is_empty()
-                            {
-                                sip_handler.store.update_stream_server_info(
-                                    stream_id,
-                                    &resp.media_server_ip,
-                                    resp.media_server_port as u16,
-                                );
-
-                                if success {
-                                    // dispatch
-                                }
-                                sip_handler
-                                    .send_invite(sip::request::invite::SendInviteParams {
-                                        device_addr: socket_addr,
-                                        tcp_stream,
-                                        branch,
-                                        channel_id,
-                                        caller_id: call_id,
-                                        from_tag,
-                                        media_server_ip: resp.media_server_ip,
-                                        media_server_port: resp.media_server_port as u16,
-                                        session_type: sip::message::sdp::SdpSessionType::Playback,
-                                        gb_code: data.gb_code.clone(),
-                                        setup_type: data.setup_type.clone(),
-                                        start_ts: data.start_ts,
-                                        stop_ts: data.stop_ts,
-                                    })
-                                    .await;
-                            }
-                        }
-                    }
-                }
-            };
+            if success {
+                // dispatch
+            }
+            sip_handler
+                .send_invite(sip::request::invite::SendInviteParams {
+                    device_addr: socket_addr,
+                    tcp_stream,
+                    branch,
+                    channel_id,
+                    caller_id: call_id,
+                    from_tag,
+                    media_server_ip: server_ip.to_string(),
+                    media_server_port: server_port,
+                    session_type: sip::message::sdp::SdpSessionType::Playback,
+                    gb_code: data.gb_code.clone(),
+                    setup_type: data.setup_type.clone(),
+                    start_ts: data.start_ts,
+                    stop_ts: data.stop_ts,
+                })
+                .await;
         }
     };
 
