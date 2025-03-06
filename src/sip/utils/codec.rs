@@ -24,7 +24,7 @@ impl SipHandler {
 
     pub fn encode_body(&self, data: &str) -> Vec<u8> {
         let s = data.replace(r#"encoding="UTF-8""#, r#"encoding="GB2312""#);
-        return textcode::gb2312::encode_to_vec(s.as_str());
+        textcode::gb2312::encode_to_vec(s.as_str())
 
         // let (msg, _encoding, has_error) = encoding_rs::GB18030.encode(&s);
         // if has_error {

@@ -115,7 +115,7 @@ pub async fn run_forever(
                 Ok((tcp_stream, addr)) => {
                     let sip_handler_cloned = sip_handler.clone();
                     tokio::spawn(async move {
-                        let mut buffer = Vec::new();
+                        let mut buffer = Vec::<u8>::new();
 
                         let (mut tcp_stream_reader, tcp_stream_writer) = tcp_stream.into_split();
 
@@ -132,6 +132,10 @@ pub async fn run_forever(
                                     return;
                                 }
                             };
+                            // Should parse sip message by protocol tag.
+                            // sip_handler_cloned
+                            //     .dispatch(addr, Some(tcp_stream_mutex_arc.clone()), &recv_buff[..n])
+                            //     .await;
 
                             buffer.extend_from_slice(&recv_buff[..n]);
 
